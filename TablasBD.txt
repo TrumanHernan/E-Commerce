@@ -1,15 +1,4 @@
-- PROGRAMACION WEB l
-
-- Ingeniero Wilson Villanueva
-
-- Proyecto web l Ecommerce
-
-- Desalladores: 
-    Truman Castañeda
-    Alberto Colindres
-    Christopher Martinez
-
-- 18 TABLAS TOTALES DE LA BD DEL PROYECTO ECOMMERCE DE SUPLEMENTOS.
+18 TABLAS TOTALES DE LA BD DEL PROYECTO ECOMMERCE DE SUPLEMENTOS.
 1. usuarios  
 2. direcciones_envio
 3. notificaciones  
@@ -28,3 +17,4 @@
 16. pagos  
 17. seguimiento_pedidos
 18. dashboard_reportes 
+
