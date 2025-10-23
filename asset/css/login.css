@@ -4,6 +4,10 @@
     font-family: 'Segoe UI', sans-serif;
     background-color: #f5f5f5;
 }
+
+  a{
+    text-decoration: none;
+  }
   .contenedor-principal {
     min-height: 100vh;
     display: flex;
