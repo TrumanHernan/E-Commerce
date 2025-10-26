@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Detalle del Producto</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="/asset/css/categorias.css">
+  <style>
+    .text-green {
+      color: #11BF6E;
+    }
+
+    .btn-green {
+      background-color: #11BF6E;
+      color: white;
+    }
+
+    .btn-green:hover {
+      background-color: #0fa65a;
+      color: white;
+    }
+
+    .imagen-producto {
+      background-color: white;
+      padding: 30px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 400px;
+    }
+
+    .imagen-producto img {
+      max-width: 100%;
+      max-height: 400px;
+      object-fit: contain;
+    }
+
+    .tab-content {
+      margin-top: 20px;
+    }
+
+    .nutriente-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .nutriente-item:last-child {
+      border-bottom: none;
+    }
+
+    .nutriente-nombre {
+      font-weight: 600;
+      color: #333;
+    }
+
+    .nutriente-valor {
+      color: #11BF6E;
+      font-weight: 700;
+    }
+
+    .barra-progreso {
+      height: 8px;
+      background-color: #e9ecef;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 5px;
+    }
+
+    .barra-valor {
+      height: 100%;
+      background-color: #11BF6E;
+      border-radius: 4px;
+    }
+
+    .cantidad-selector {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .cantidad-selector button {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .cantidad-selector input {
+      width: 60px;
+      text-align: center;
+      border: 2px solid #ddd;
+      border-radius: 5px;
+      padding: 8px;
+      font-weight: 700;
+    }
+
+    .card-info {
+      background-color: #f8f9fa;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+
+    .badge-custom {
+      background-color: #11BF6E;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .rating {
+      color: #ffc107;
+      font-size: 16px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="bg-white border-bottom">
+    <div class="container py-4 px-3">
+      <div class="row align-items-center gy-3">
+
+        <div class="col-12 col-md-auto text-center text-md-start">
+          <a href="/" class="text-decoration-none">
+            <h1 class="h2 fw-bold m-0">
+              <span id="spanlogo">Nutri</span><span class="logo-shop">Shop</span>
+            </h1>
+          </a>
+        </div>
+
+        <div class="col-12 col-md text-center text-md-start">
+          <form class="d-flex justify-content-center justify-content-md-start" role="search" style="max-width: 500px; margin: 0 auto;">
+            <input class="form-control form-control-lg me-2 bg-light border-0" type="search" placeholder="Buscar productos..." aria-label="Buscar">
+            <button class="btn btn-success w-25" type="submit">Buscar</button>
+          </form>
+        </div>
+
+        <div class="col-12 col-md-auto d-flex justify-content-center justify-content-md-end gap-3">
+          <a href="/favoritos" class="iconos-header" aria-label="Favoritos">
+            <i class="bi bi-heart fs-4"></i>
+          </a>
+          <a href="/perfil" class="iconos-header" aria-label="Mi Cuenta">
+            <i class="bi bi-person fs-4"></i>
+          </a>
+          <a href="/plantillas/carrito.html" class="text-decoration-none position-relative iconos-header" aria-label="Carrito de compras">
+            <span class="position-absolute badge rounded-pill bg-success fw-bold" style="top: -5px; right: -5px; font-size: 0.75rem;">0</span>
+            <i class="bi bi-cart fs-3"></i>
+            <small class="text-dark d-block">Carrito</small>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <nav class="navbar navbar-expand-lg bg-white border-top">
+      <div class="container">
+        <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNutri" aria-controls="navbarNutri" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-center" id="navbarNutri">
+          <div class="d-flex flex-wrap justify-content-center py-3">
+            <a href="/" class="text-decoration-none nav-link-custom mx-4"><i class="bi bi-house-door me-1"></i> Inicio</a>
+            <a href="/categorias" class="text-decoration-none nav-link-custom mx-4"><i class="bi bi-grid me-1"></i> Categorías</a>
+            <a href="/productos" class="text-decoration-none nav-link-custom mx-4"><i class="bi bi-box-seam me-1"></i> Productos</a>
+            <a href="/ofertas" class="text-decoration-none nav-link-custom mx-4"><i class="bi bi-tags me-1"></i> Ofertas</a>
+            <a href="/nosotros" class="text-decoration-none nav-link-custom mx-4"><i class="bi bi-people me-1"></i> Nosotros</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container my-5">
+    <a href="/plantillas/vitaminas.html" class="btn btn-outline-secondary btn-sm mb-4">
+      <i class="bi bi-arrow-left me-2"></i>Volver
+    </a>
+
+    <div class="row">
+      <div class="col-lg-4 mb-4 mb-lg-0">
+        <div class="imagen-producto shadow-sm">
+          <img id="imagenProducto" src="/asset/img/vitaminaC.png" alt="Producto">
+        </div>
+
+        <div class="card border-0 shadow-sm mt-4">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h3 class="text-green mb-0" id="nombreProducto">Vitamina C</h3>
+              <button class="btn btn-outline-danger btn-sm">
+                <i class="bi bi-heart"></i>
+              </button>
+            </div>
+
+            <div class="rating mb-3">
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-half"></i>
+              <span class="text-muted ms-2">(127 reseñas)</span>
+            </div>
+
+            <hr>
+
+            <p class="text-muted" id="descripcionProducto">Vitamina C de 60 cápsulas de 750mg cada una. Refuerza tu sistema inmunológico naturalmente.</p>
+
+            <div class="card-info">
+              <div class="row text-center">
+                <div class="col-6">
+                  <div class="text-muted small">Precio</div>
+                  <div class="h4 text-green fw-bold" id="precioProducto">L 235</div>
+                </div>
+                <div class="col-6">
+                  <div class="text-muted small">Stock</div>
+                  <div class="h4 fw-bold text-success">45</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="cantidad-selector">
+              <button class="btn btn-outline-secondary" onclick="cambiarCantidad(-1)">
+                <i class="bi bi-dash"></i>
+              </button>
+              <input type="number" id="cantidad" value="1" min="1" class="form-control" style="width: 80px;">
+              <button class="btn btn-outline-secondary" onclick="cambiarCantidad(1)">
+                <i class="bi bi-plus"></i>
+              </button>
+            </div>
+
+            <button class="btn btn-green w-100 py-2 fw-bold mb-2">
+              <i class="bi bi-cart-check me-2"></i>Agregar al Carrito
+            </button>
+            <button class="btn btn-outline-success w-100 py-2 fw-bold">
+              <i class="bi bi-lightning-fill me-2"></i>Comprar Ahora
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-8">
+        <ul class="nav nav-tabs border-0 mb-4" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active border-0 border-bottom border-2 text-green fw-bold" id="nutrientes-tab" data-bs-toggle="tab" data-bs-target="#nutrientes" type="button">
+              <i class="bi bi-graph-up me-2"></i>Información Nutricional
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link border-0 border-bottom border-2 text-muted fw-bold" id="descripcion-tab" data-bs-toggle="tab" data-bs-target="#descripcion" type="button">
+              <i class="bi bi-info-circle me-2"></i>Descripción
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link border-0 border-bottom border-2 text-muted fw-bold" id="resenas-tab" data-bs-toggle="tab" data-bs-target="#resenas" type="button">
+              <i class="bi bi-chat-dots me-2"></i>Reseñas
+            </button>
+          </li>
+        </ul>
+
+        <div class="tab-content">
+          <div class="tab-pane fade show active" id="nutrientes" role="tabpanel">
+            <div class="card border-0 shadow-sm">
+              <div class="card-body">
+                <h5 class="mb-4 text-green"><i class="bi bi-droplet-fill me-2"></i>Información Nutricional por Porción</h5>
+
+                <div class="nutriente-item">
+                  <span class="nutriente-nombre">Calorías</span>
+                  <span class="nutriente-valor">5 kcal</span>
+                </div>
+
+                <div class="nutriente-item">
+                  <div class="w-100">
+                    <div class="d-flex justify-content-between">
+                      <span class="nutriente-nombre">Vitamina C</span>
+                      <span class="nutriente-valor">750 mg</span>
+                    </div>
+                    <div class="barra-progreso">
+                      <div class="barra-valor" style="width: 1250%;"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="nutriente-item">
+                  <span class="nutriente-nombre">Vitamina E</span>
+                  <span class="nutriente-valor">15 mg</span>
+                </div>
+
+                <div class="nutriente-item">
+                  <span class="nutriente-nombre">Zinc</span>
+                  <span class="nutriente-valor">10 mg</span>
+                </div>
+
+                <div class="nutriente-item">
+                  <span class="nutriente-nombre">Selenio</span>
+                  <span class="nutriente-valor">55 mcg</span>
+                </div>
+
+                <div class="nutriente-item">
+                  <span class="nutriente-nombre">Grasas Totales</span>
+                  <span class="nutriente-valor">0 g</span>
+                </div>
+
+                <div class="nutriente-item">
+                  <span class="nutriente-nombre">Carbohidratos</span>
+                  <span class="nutriente-valor">1 g</span>
+                </div>
+
+                <div class="nutriente-item">
+                  <span class="nutriente-nombre">Proteína</span>
+                  <span class="nutriente-valor">0 g</span>
+                </div>
+
+                <div class="nutriente-item">
+                  <span class="nutriente-nombre">Sodio</span>
+                  <span class="nutriente-valor">0 mg</span>
+                </div>
+
+                <div class="alert alert-info mt-4 mb-0">
+                  <i class="bi bi-info-circle me-2"></i>
+                  <small><strong>Nota:</strong> Los porcentajes de valor diario se basan en una dieta de 2,000 calorías. Consulta a tu médico antes de iniciar cualquier suplemento.</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tab-pane fade" id="descripcion" role="tabpanel">
+            <div class="card border-0 shadow-sm">
+              <div class="card-body">
+                <h5 class="mb-3 text-green">Acerca de este Producto</h5>
+
+                <p>Nuestra Vitamina C es un suplemento de alta calidad formulado para fortalecer tu sistema inmunológico y mejorar tu salud general.</p>
+
+                <h6 class="mt-4 fw-bold">Características Principales:</h6>
+                <ul class="list-unstyled">
+                  <li class="mb-2"><i class="bi bi-check-circle text-green me-2"></i> 750 mg de Vitamina C pura por cápsula</li>
+                  <li class="mb-2"><i class="bi bi-check-circle text-green me-2"></i> 60 cápsulas por envase</li>
+                  <li class="mb-2"><i class="bi bi-check-circle text-green me-2"></i> Refuerza el sistema inmunológico</li>
+                  <li class="mb-2"><i class="bi bi-check-circle text-green me-2"></i> Potente antioxidante natural</li>
+                  <li class="mb-2"><i class="bi bi-check-circle text-green me-2"></i> Mejora la absorción de hierro</li>
+                  <li class="mb-2"><i class="bi bi-check-circle text-green me-2"></i> Libre de alérgenos comunes</li>
+                </ul>
+
+                <h6 class="mt-4 fw-bold">Modo de Uso:</h6>
+                <p>Tomar 1 cápsula diaria con las comidas o según lo indicado por un profesional de la salud.</p>
+
+                <h6 class="mt-4 fw-bold">Ingredientes:</h6>
+                <p>Ácido Ascórbico (Vitamina C), Celulosa Microcristalina, Estearato de Magnesio, Cápsula Vegetal.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="tab-pane fade" id="resenas" role="tabpanel">
+            <div class="card border-0 shadow-sm">
+              <div class="card-body">
+                <h5 class="mb-4 text-green">Reseñas de Clientes</h5>
+
+                <div class="border-bottom pb-4 mb-4">
+                  <div class="d-flex justify-content-between align-items-start mb-2">
+                    <div>
+                      <strong>Juan Martinez</strong>
+                      <div class="rating small mt-1">
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                      </div>
+                    </div>
+                    <small class="text-muted">Hace 2 semanas</small>
+                  </div>
+                  <p class="text-muted">Excelente producto, me siento mucho mejor desde que empecé a tomar estas vitaminas. La calidad es muy buena.</p>
+                </div>
+
+                <div class="border-bottom pb-4 mb-4">
+                  <div class="d-flex justify-content-between align-items-start mb-2">
+                    <div>
+                      <strong>María López</strong>
+                      <div class="rating small mt-1">
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-half"></i>
+                      </div>
+                    </div>
+                    <small class="text-muted">Hace 1 mes</small>
+                  </div>
+                  <p class="text-muted">Muy buen producto. Las cápsulas son fáciles de tomar y el precio está bien.</p>
+                </div>
+
+                <div class="pb-4">
+                  <div class="d-flex justify-content-between align-items-start mb-2">
+                    <div>
+                      <strong>Carlos Rodríguez</strong>
+                      <div class="rating small mt-1">
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                      </div>
+                    </div>
+                    <small class="text-muted">Hace 1 mes</small>
+                  </div>
+                  <p class="text-muted">Producto de calidad premium. La entrega fue rápida y bien empacado. 100% recomendado.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-5">
+      <div class="col-12">
+        <h4 class="mb-4">Productos Relacionados</h4>
+        <div class="row g-4">
+          <div class="col-md-3">
+            <div class="card h-100 border-0 shadow-sm" onclick="cambiarProducto('vitaminaD3.png', 'Vitamina D3', 'L 480')">
+              <img src="/asset/img/vitaminaD3.png" class="card-img-top p-3" alt="Vitamina D3" style="background-color: white; height: 200px; object-fit: contain;">
+              <div class="card-body">
+                <h6 class="card-title">Vitamina D3</h6>
+                <p class="card-text text-green fw-bold">L 480</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card h-100 border-0 shadow-sm" onclick="cambiarProducto('omega-3.png', 'Omega-3', 'L 330')">
+              <img src="/asset/img/omega-3.png" class="card-img-top p-3" alt="Omega-3" style="background-color: white; height: 200px; object-fit: contain;">
+              <div class="card-body">
+                <h6 class="card-title">Omega-3</h6>
+                <p class="card-text text-green fw-bold">L 330</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card h-100 border-0 shadow-sm" onclick="cambiarProducto('creatina_evolution.png', 'Creatina Evolution', 'L 830')">
+              <img src="/asset/img/creatina_evolution.png" class="card-img-top p-3" alt="Creatina Evolution" style="background-color: white; height: 200px; object-fit: contain;">
+              <div class="card-body">
+                <h6 class="card-title">Creatina Evolution</h6>
+                <p class="card-text text-green fw-bold">L 830</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card h-100 border-0 shadow-sm" onclick="cambiarProducto('mass_gainer.png', 'Mass Gainer Pro', 'L 1250')">
+              <img src="/asset/img/mass_gainer.png" class="card-img-top p-3" alt="Mass Gainer" style="background-color: white; height: 200px; object-fit: contain;">
+              <div class="card-body">
+                <h6 class="card-title">Mass Gainer Pro</h6>
+                <p class="card-text text-green fw-bold">L 1250</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="text-white mt-5 pt-4 pb-2">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4">
+          <h5>NutriShop</h5>
+          <p>Tu tienda de confianza para suplementos <br> deportivos y nutricionales de la más alta calidad.</p>
+        </div>
+
+        <div class="col-md-3 offset-md-1">
+          <h5>Enlaces Rápidos</h5>
+          <ul class="list-unstyled">
+            <li><a href="#" class="text-white text-decoration-none">Sobre Nosotros</a></li>
+            <li><a href="#" class="text-white text-decoration-none">Contacto</a></li>
+          </ul>
+        </div>
+
+        <div class="col-md-3 offset-md-1">
+          <h5>Categorías</h5>
+          <ul class="list-unstyled">
+            <li><a href="#" class="text-white text-decoration-none">Proteínas</a></li>
+            <li><a href="#" class="text-white text-decoration-none">Quemadores</a></li>
+            <li><a href="#" class="text-white text-decoration-none">Pre-Entreno</a></li>
+            <li><a href="#" class="text-white text-decoration-none">Vitaminas</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <hr class="bg-white">
+
+      <div class="container">
+        <div class="row text-center text-md-start gy-2">
+          <div class="col-12 col-md-6">
+            <p class="mb-0">© 2025 NutriShop. Todos los derechos reservados.</p>
+          </div>
+          <div class="col-12 col-md-6 text-md-end">
+            <p class="mb-0">Desarrolladores: Truman Castañeda, Alberto Colindres, Christopher Martínez</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/interior-productos.js"></script>
+
+</body>
+</html>

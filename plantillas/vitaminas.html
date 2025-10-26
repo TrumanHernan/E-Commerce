@@ -41,7 +41,7 @@
               <a href="/perfil" class="iconos-header" aria-label="Mi Cuenta">
                 <i class="bi bi-person fs-4"></i>
               </a>
-              <a href="/carrito" class="text-decoration-none position-relative iconos-header" aria-label="Carrito de compras">
+              <a href="/plantillas/carrito.html" class="text-decoration-none position-relative iconos-header" aria-label="Carrito de compras">
                 <span class="position-absolute badge rounded-pill bg-success fw-bold" style="top: -5px; right: -5px; font-size: 0.75rem;">0</span>
                 <i class="bi bi-cart fs-3"></i>
                 <small class="text-dark d-block">Carrito</small>
@@ -79,7 +79,7 @@
       <!-- Tarjeta 1 -->
       <div class="col-12 col-sm-6 col-md-4">
 
-        <div class="card h-100">
+        <div class="card h-100" style="cursor: pointer; transition: transform 0.3s ease-in-out;" onclick="window.location.href='/plantillas/interior-productos.html'">
 
           <div class="position-absolute top-0 end-0 p-2">
             <i class="bi bi-heart text-secondary fs-4 favorito" style="cursor: pointer;"></i>
@@ -94,7 +94,7 @@
             <hr class="my-4">
 
             <p class="fw-bold fs-5 fst-italic text-success">L 235</p>
-            <button class="btn btn-success agregar-carrito"><i class="bi bi-cart-check"></i> Agregar al carrito</button>
+            <button class="btn btn-success agregar-carrito" onclick="event.stopPropagation()"><i class="bi bi-cart-check"></i> Agregar al carrito</button>
           </div>
         </div>
 
@@ -102,11 +102,11 @@
 
       <!-- Tarjeta 2 -->
       <div class="col-12 col-sm-6 col-md-4">
-        <div class="card h-100">
+        <div class="card h-100" style="cursor: pointer; transition: transform 0.3s ease-in-out;" onclick="window.location.href='/plantillas/interior-productos.html'">
 
           <div class="position-absolute top-0 end-0 p-2">
             <i class="bi bi-heart text-secondary fs-4 favorito" style="cursor: pointer;"></i>
-          </div>          
+          </div>
 
           <img src="/asset/img/vitaminaD3.png" class="card-img-top" alt="VitaminaD3">
 
@@ -117,7 +117,7 @@
             <hr class="my-4">
 
             <p class="fw-bold fs-5 fst-italic text-success">L 480</p>
-            <button class="btn btn-success agregar-carrito"><i class="bi bi-cart-check"></i> Agregar al carrito</button>
+            <button class="btn btn-success agregar-carrito" onclick="event.stopPropagation()"><i class="bi bi-cart-check"></i> Agregar al carrito</button>
           </div>
         </div>
 
@@ -125,12 +125,12 @@
 
       <!-- Tarjeta 3 -->
       <div class="col-12 col-sm-6 col-md-4">
-        <div class="card h-100">
+        <div class="card h-100" style="cursor: pointer; transition: transform 0.3s ease-in-out;" onclick="window.location.href='/plantillas/interior-productos.html'">
 
           <div class="position-absolute top-0 end-0 p-2">
             <i class="bi bi-heart text-secondary fs-4 favorito" style="cursor: pointer;"></i>
-          </div>          
-          
+          </div>
+
           <img src="/asset/img/omega-3.png" class= "card-img-top" alt="Omega-3">
 
           <div class="card-body">
@@ -140,7 +140,7 @@
             <hr class="my-4">
 
             <p class="fw-bold fs-5 fst-italic text-success">L 330</p>
-            <button class="btn btn-success agregar-carrito"><i class="bi bi-cart-check"></i> Agregar al carrito</button>
+            <button class="btn btn-success agregar-carrito" onclick="event.stopPropagation()"><i class="bi bi-cart-check"></i> Agregar al carrito</button>
           </div>
         </div>
       </div>

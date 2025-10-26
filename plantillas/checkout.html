@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Finalizar Compra</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="/asset/css/categorias.css">
+  <style>
+    .bg-light-green {
+      background-color: #f0fdf5;
+    }
+
+    .border-green {
+      border-left: 4px solid #11BF6E;
+    }
+
+    .text-green {
+      color: #11BF6E;
+    }
+
+    .btn-green {
+      background-color: #11BF6E;
+      color: white;
+    }
+
+    .btn-green:hover {
+      background-color: #0fa65a;
+      color: white;
+    }
+
+    .pago-option input[type="radio"] {
+      display: none;
+    }
+
+    .pago-option label {
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .pago-option input[type="radio"]:checked + label {
+      border-color: #11BF6E !important;
+      background-color: #f0fdf5 !important;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="bg-white border-bottom">
+    <div class="container py-4 px-3">
+      <div class="row align-items-center gy-3">
+
+        <div class="col-12 col-md-auto text-center text-md-start">
+          <a href="/" class="text-decoration-none">
+            <h1 class="h2 fw-bold m-0">
+              <span id="spanlogo">Nutri</span><span class="logo-shop">Shop</span>
+            </h1>
+          </a>
+        </div>
+
+        <div class="col-12 col-md text-center text-md-start">
+          <form class="d-flex justify-content-center justify-content-md-start" role="search" style="max-width: 500px; margin: 0 auto;">
+            <input class="form-control form-control-lg me-2 bg-light border-0" type="search" placeholder="Buscar productos..." aria-label="Buscar">
+            <button class="btn btn-success w-25" type="submit">Buscar</button>
+          </form>
+        </div>
+
+        <div class="col-12 col-md-auto d-flex justify-content-center justify-content-md-end gap-3">
+          <a href="/favoritos" class="iconos-header" aria-label="Favoritos">
+            <i class="bi bi-heart fs-4"></i>
+          </a>
+          <a href="/perfil" class="iconos-header" aria-label="Mi Cuenta">
+            <i class="bi bi-person fs-4"></i>
+          </a>
+          <a href="/plantillas/carrito.html" class="text-decoration-none position-relative iconos-header" aria-label="Carrito de compras">
+            <span class="position-absolute badge rounded-pill bg-success fw-bold" style="top: -5px; right: -5px; font-size: 0.75rem;">0</span>
+            <i class="bi bi-cart fs-3"></i>
+            <small class="text-dark d-block">Carrito</small>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <nav class="navbar navbar-expand-lg bg-white border-top">
+      <div class="container">
+        <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNutri" aria-controls="navbarNutri" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-center" id="navbarNutri">
+          <div class="d-flex flex-wrap justify-content-center py-3">
+            <a href="/" class="text-decoration-none nav-link-custom mx-4"><i class="bi bi-house-door me-1"></i> Inicio</a>
+            <a href="/categorias" class="text-decoration-none nav-link-custom mx-4"><i class="bi bi-grid me-1"></i> Categorías</a>
+            <a href="/productos" class="text-decoration-none nav-link-custom mx-4"><i class="bi bi-box-seam me-1"></i> Productos</a>
+            <a href="/ofertas" class="text-decoration-none nav-link-custom mx-4"><i class="bi bi-tags me-1"></i> Ofertas</a>
+            <a href="/nosotros" class="text-decoration-none nav-link-custom mx-4"><i class="bi bi-people me-1"></i> Nosotros</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="bg-light py-5">
+    <div class="container">
+      <h2 class="mb-5"><i class="bi bi-check-circle me-2 text-green"></i>Finalizar Compra</h2>
+
+      <div class="row">
+        <div class="col-lg-8">
+          <form id="formularioCheckout">
+
+            <div class="card mb-4 border-0 shadow-sm">
+              <div class="card-header bg-white border-bottom-0 py-3">
+                <h5 class="text-green mb-0"><i class="bi bi-person-check me-2"></i>Información de Envío</h5>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label for="nombre" class="form-label fw-bold">Nombre Completo</label>
+                    <input type="text" class="form-control" id="nombre" name="nombre" required>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="email" class="form-label fw-bold">Correo Electrónico</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label for="telefono" class="form-label fw-bold">Teléfono</label>
+                    <input type="tel" class="form-control" id="telefono" name="telefono" required>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="cedula" class="form-label fw-bold">Cédula / Identidad</label>
+                    <input type="text" class="form-control" id="cedula" name="cedula" required>
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <label for="direccion" class="form-label fw-bold">Dirección de Envío</label>
+                  <input type="text" class="form-control" id="direccion" name="direccion" placeholder="Calle, número y complementos" required>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label for="ciudad" class="form-label fw-bold">Ciudad</label>
+                    <input type="text" class="form-control" id="ciudad" name="ciudad" required>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="departamento" class="form-label fw-bold">Departamento</label>
+                    <input type="text" class="form-control" id="departamento" name="departamento" required>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label for="pais" class="form-label fw-bold">País</label>
+                    <select class="form-select" id="pais" name="pais" required>
+                      <option selected>Seleccionar país...</option>
+                      <option value="honduras">Honduras</option>
+                      <option value="guatemala">Guatemala</option>
+                      <option value="elsalvador">El Salvador</option>
+                      <option value="nicaragua">Nicaragua</option>
+                    </select>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="codigo_postal" class="form-label fw-bold">Código Postal</label>
+                    <input type="text" class="form-control" id="codigo_postal" name="codigo_postal">
+                  </div>
+                </div>
+
+                <div class="alert alert-info bg-light-green border-green border-1 mt-3" role="alert">
+                  <i class="bi bi-info-circle me-2 text-green"></i>
+                  <strong>Envío rápido:</strong> Entregaremos tu pedido en 3-5 días hábiles a partir de la confirmación del pago.
+                </div>
+              </div>
+            </div>
+
+            <div class="card mb-4 border-0 shadow-sm">
+              <div class="card-header bg-white border-bottom-0 py-3">
+                <h5 class="text-green mb-0"><i class="bi bi-credit-card me-2"></i>Método de Pago</h5>
+              </div>
+              <div class="card-body">
+                <div class="row g-3">
+                  <div class="col-md-4 pago-option">
+                    <input type="radio" id="visa" name="metodo_pago" value="tarjeta_credito" required>
+                    <label for="visa" class="card p-3 text-center border-2 h-100">
+                      <i class="bi bi-credit-card fs-1 text-green mb-2"></i>
+                      <div class="fw-bold">Tarjeta de Crédito</div>
+                    </label>
+                  </div>
+
+                  <div class="col-md-4 pago-option">
+                    <input type="radio" id="efectivo" name="metodo_pago" value="efectivo">
+                    <label for="efectivo" class="card p-3 text-center border-2 h-100">
+                      <i class="bi bi-cash-coin fs-1 text-green mb-2"></i>
+                      <div class="fw-bold">Efectivo</div>
+                    </label>
+                  </div>
+
+                  <div class="col-md-4 pago-option">
+                    <input type="radio" id="transferencia" name="metodo_pago" value="transferencia">
+                    <label for="transferencia" class="card p-3 text-center border-2 h-100">
+                      <i class="bi bi-bank fs-1 text-green mb-2"></i>
+                      <div class="fw-bold">Transferencia Bancaria</div>
+                    </label>
+                  </div>
+                </div>
+
+                <div id="formulario-tarjeta" style="display: none; margin-top: 25px;">
+                  <div class="row">
+                    <div class="col-md-6 mb-4">
+                      <div class="tarjeta-credito shadow-lg rounded-3 p-4 position-relative" style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); color: white; height: 220px; cursor: pointer; transition: transform 0.3s;">
+                        <div style="position: absolute; top: 20px; right: 20px;">
+                          <div style="width: 50px; height: 35px; background-color: #fbbf24; border-radius: 5px;"></div>
+                        </div>
+
+                        <div style="margin-top: 30px;">
+                          <small style="opacity: 0.7;">NÚMERO DE TARJETA</small>
+                          <div style="font-size: 24px; letter-spacing: 2px; font-weight: bold; margin-top: 8px; font-family: 'Courier New', monospace;">
+                            <span id="display-numero">0000 0000 0000 0000</span>
+                          </div>
+                        </div>
+
+                        <div style="margin-top: 35px; display: flex; justify-content: space-between; align-items: flex-end;">
+                          <div>
+                            <small style="opacity: 0.7; display: block; font-size: 10px;">TITULAR</small>
+                            <div style="font-size: 14px; font-weight: bold; margin-top: 4px; text-transform: uppercase;">
+                              <span id="display-titular">NOMBRE COMPLETO</span>
+                            </div>
+                          </div>
+                          <div style="text-align: right;">
+                            <small style="opacity: 0.7; display: block; font-size: 10px;">EXPIRA</small>
+                            <div style="font-size: 16px; font-weight: bold; font-family: 'Courier New', monospace;">
+                              <span id="display-fecha">MM/AA</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="mt-3 p-3 rounded bg-light" style="background-color: #f8f9fa;">
+                        <small class="text-muted">CVV: <strong id="display-cvv" style="font-size: 16px; font-family: 'Courier New', monospace;">***</strong></small>
+                      </div>
+                    </div>
+
+                    <div class="col-md-6">
+                      <div class="mb-3">
+                        <label for="numero_tarjeta" class="form-label fw-bold">Número de Tarjeta</label>
+                        <input type="text" class="form-control" id="numero_tarjeta" name="numero_tarjeta" placeholder="0000 0000 0000 0000" maxlength="19">
+                      </div>
+
+                      <div class="mb-3">
+                        <label for="titular" class="form-label fw-bold">Nombre del Titular</label>
+                        <input type="text" class="form-control" id="titular" name="titular" placeholder="Juan Pérez">
+                      </div>
+
+                      <div class="row">
+                        <div class="col-md-8 mb-3">
+                          <label for="fecha_expiracion" class="form-label fw-bold">Fecha de Expiración</label>
+                          <input type="text" class="form-control" id="fecha_expiracion" name="fecha_expiracion" placeholder="MM/AA" maxlength="5">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                          <label for="cvv" class="form-label fw-bold">CVV</label>
+                          <input type="text" class="form-control" id="cvv" name="cvv" placeholder="000" maxlength="3">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div id="informacion-efectivo" style="display: none; margin-top: 20px;">
+                  <div class="alert alert-info bg-light-green border-green border-1" role="alert">
+                    <i class="bi bi-info-circle me-2 text-green"></i>
+                    <strong>Pago en efectivo:</strong> Deberás pagar en el momento de la entrega. Por favor ten el monto exacto.
+                  </div>
+                </div>
+
+                <div id="informacion-transferencia" style="display: none; margin-top: 20px;">
+                  <div class="alert alert-info bg-light-green border-green border-1" role="alert">
+                    <strong>Datos para transferencia bancaria:</strong><br>
+                    <small>
+                      <strong>Banco:</strong> BANHONDURAS<br>
+                      <strong>Número de Cuenta:</strong> 123456789<br>
+                      <strong>Titular:</strong> NutriShop Honduras<br>
+                      <strong>Referencia:</strong> Incluye tu número de cédula
+                    </small>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card border-0 shadow-sm">
+              <div class="card-body">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="terminos" name="terminos" required>
+                  <label class="form-check-label" for="terminos">
+                    Acepto los términos y condiciones de compra y envío
+                  </label>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <div class="col-lg-4">
+          <div class="card border-0 shadow-sm position-sticky" style="top: 20px;">
+            <div class="card-header bg-white border-bottom-0 py-3">
+              <h5 class="text-green mb-0"><i class="bi bi-bag-check me-2"></i>Resumen del Pedido</h5>
+            </div>
+            <div class="card-body">
+              <div id="lista-productos">
+                <div class="d-flex justify-content-between align-items-start pb-3 border-bottom">
+                  <div>
+                    <div class="fw-bold">Vitamina C</div>
+                    <small class="text-muted">Cantidad: 1</small>
+                  </div>
+                  <div class="fw-bold text-green">L 235</div>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-start py-3 border-bottom">
+                  <div>
+                    <div class="fw-bold">Pre-Entreno C4</div>
+                    <small class="text-muted">Cantidad: 2</small>
+                  </div>
+                  <div class="fw-bold text-green">L 1,560</div>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-start py-3 border-bottom">
+                  <div>
+                    <div class="fw-bold">Creatina Evolution</div>
+                    <small class="text-muted">Cantidad: 1</small>
+                  </div>
+                  <div class="fw-bold text-green">L 830</div>
+                </div>
+              </div>
+
+              <div class="mt-4 pt-3 border-top">
+                <div class="d-flex justify-content-between mb-2">
+                  <span>Subtotal:</span>
+                  <span class="fw-bold">L 2,625</span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                  <span>Envío:</span>
+                  <span class="fw-bold">L 60</span>
+                </div>
+                <div class="d-flex justify-content-between mb-3 pb-3 border-bottom">
+                  <span>Impuesto (15%):</span>
+                  <span class="fw-bold">L 403</span>
+                </div>
+                <div class="d-flex justify-content-between">
+                  <span class="fw-bold fs-5">Total a Pagar:</span>
+                  <span class="fw-bold fs-5 text-green">L 3,088</span>
+                </div>
+              </div>
+
+              <button type="submit" form="formularioCheckout" class="btn btn-green w-100 mt-4 py-2 fw-bold">
+                <i class="bi bi-check-circle me-2"></i>Confirmar Compra
+              </button>
+
+              <a href="/plantillas/carrito.html" class="btn btn-outline-secondary w-100 mt-2 py-2">
+                <i class="bi bi-arrow-left me-2"></i>Volver al Carrito
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="text-white mt-5 pt-4 pb-2">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4">
+          <h5>NutriShop</h5>
+          <p>Tu tienda de confianza para suplementos <br> deportivos y nutricionales de la más alta calidad.</p>
+        </div>
+
+        <div class="col-md-3 offset-md-1">
+          <h5>Enlaces Rápidos</h5>
+          <ul class="list-unstyled">
+            <li><a href="#" class="text-white text-decoration-none">Sobre Nosotros</a></li>
+            <li><a href="#" class="text-white text-decoration-none">Contacto</a></li>
+          </ul>
+        </div>
+
+        <div class="col-md-3 offset-md-1">
+          <h5>Categorías</h5>
+          <ul class="list-unstyled">
+            <li><a href="#" class="text-white text-decoration-none">Proteínas</a></li>
+            <li><a href="#" class="text-white text-decoration-none">Quemadores</a></li>
+            <li><a href="#" class="text-white text-decoration-none">Pre-Entreno</a></li>
+            <li><a href="#" class="text-white text-decoration-none">Vitaminas</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <hr class="bg-white">
+
+      <div class="container">
+        <div class="row text-center text-md-start gy-2">
+          <div class="col-12 col-md-6">
+            <p class="mb-0">© 2025 NutriShop. Todos los derechos reservados.</p>
+          </div>
+          <div class="col-12 col-md-6 text-md-end">
+            <p class="mb-0">Desarrolladores: Truman Castañeda, Alberto Colindres, Christopher Martínez</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/checkout.js"></script>
+
+</body>
+</html>

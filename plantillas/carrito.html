@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Carrito de Compras</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="/asset/css/categorias.css">
+  <style>
+    .text-green {
+      color: #11BF6E;
+    }
+
+    .btn-green {
+      background-color: #11BF6E;
+      color: white;
+    }
+
+    .btn-green:hover {
+      background-color: #0fa65a;
+      color: white;
+    }
+
+    .producto-carrito {
+      border-bottom: 1px solid #eee;
+      padding: 15px 0;
+    }
+
+    .producto-carrito:last-child {
+      border-bottom: none;
+    }
+
+    .cantidad-control {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: fit-content;
+    }
+
+    .cantidad-control button {
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .carrito-vacio {
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    .carrito-vacio i {
+      font-size: 80px;
+      color: #ddd;
+      margin-bottom: 20px;
+    }
+
+    .resumen-carrito {
+      background-color: #f8f9fa;
+      padding: 20px;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="bg-white border-bottom">
+    <div class="container py-4 px-3">
+      <div class="row align-items-center gy-3">
+
+        <div class="col-12 col-md-auto text-center text-md-start">
+          <a href="/" class="text-decoration-none">
+            <h1 class="h2 fw-bold m-0">
+              <span id="spanlogo">Nutri</span><span class="logo-shop">Shop</span>
+            </h1>
+          </a>
+        </div>
+
+        <div class="col-12 col-md text-center text-md-start">
+          <form class="d-flex justify-content-center justify-content-md-start" role="search" style="max-width: 500px; margin: 0 auto;">
+            <input class="form-control form-control-lg me-2 bg-light border-0" type="search" placeholder="Buscar productos..." aria-label="Buscar">
+            <button class="btn btn-success w-25" type="submit">Buscar</button>
+          </form>
+        </div>
+
+        <div class="col-12 col-md-auto d-flex justify-content-center justify-content-md-end gap-3">
+          <a href="/favoritos" class="iconos-header" aria-label="Favoritos">
+            <i class="bi bi-heart fs-4"></i>
+          </a>
+          <a href="/perfil" class="iconos-header" aria-label="Mi Cuenta">
+            <i class="bi bi-person fs-4"></i>
+          </a>
+          <a href="/plantillas/carrito.html" class="text-decoration-none position-relative iconos-header" aria-label="Carrito de compras">
+            <span class="position-absolute badge rounded-pill bg-success fw-bold" style="top: -5px; right: -5px; font-size: 0.75rem;">3</span>
+            <i class="bi bi-cart fs-3"></i>
+            <small class="text-dark d-block">Carrito</small>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <nav class="navbar navbar-expand-lg bg-white border-top">
+      <div class="container">
+        <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNutri" aria-controls="navbarNutri" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-center" id="navbarNutri">
+          <div class="d-flex flex-wrap justify-content-center py-3">
+            <a href="/" class="text-decoration-none nav-link-custom mx-4"><i class="bi bi-house-door me-1"></i> Inicio</a>
+            <a href="/categorias" class="text-decoration-none nav-link-custom mx-4"><i class="bi bi-grid me-1"></i> Categorías</a>
+            <a href="/productos" class="text-decoration-none nav-link-custom mx-4"><i class="bi bi-box-seam me-1"></i> Productos</a>
+            <a href="/ofertas" class="text-decoration-none nav-link-custom mx-4"><i class="bi bi-tags me-1"></i> Ofertas</a>
+            <a href="/nosotros" class="text-decoration-none nav-link-custom mx-4"><i class="bi bi-people me-1"></i> Nosotros</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container my-5">
+    <h2 class="mb-5"><i class="bi bi-cart-check me-2 text-green"></i>Carrito de Compras</h2>
+
+    <div class="row">
+      <div class="col-lg-8">
+        <div class="card border-0 shadow-sm">
+          <div class="card-body">
+
+            <div id="carritoConProductos">
+              <div class="producto-carrito">
+                <div class="row align-items-center">
+                  <div class="col-md-2 text-center mb-3 mb-md-0">
+                    <img src="/asset/img/vitaminaC.png" alt="Vitamina C" class="img-fluid" style="max-width: 80px;">
+                  </div>
+                  <div class="col-md-4 mb-3 mb-md-0">
+                    <h6 class="fw-bold mb-1">Vitamina C</h6>
+                    <small class="text-muted">60 cápsulas de 750mg</small>
+                  </div>
+                  <div class="col-md-2 text-center mb-3 mb-md-0">
+                    <div class="cantidad-control justify-content-center">
+                      <button class="btn btn-sm btn-outline-secondary" onclick="cambiarCantidad(this, -1)">
+                        <i class="bi bi-dash"></i>
+                      </button>
+                      <span class="fw-bold" style="min-width: 30px; text-align: center;">1</span>
+                      <button class="btn btn-sm btn-outline-secondary" onclick="cambiarCantidad(this, 1)">
+                        <i class="bi bi-plus"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="col-md-2 text-center mb-3 mb-md-0">
+                    <div class="fw-bold text-green">L 235</div>
+                    <small class="text-muted">L 235 c/u</small>
+                  </div>
+                  <div class="col-md-2 text-center">
+                    <button class="btn btn-sm btn-outline-danger" onclick="eliminarProducto(this)">
+                      <i class="bi bi-trash"></i> Eliminar
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="producto-carrito">
+                <div class="row align-items-center">
+                  <div class="col-md-2 text-center mb-3 mb-md-0">
+                    <img src="/asset/img/Pre-Entreno_C4.png" alt="Pre-Entreno C4" class="img-fluid" style="max-width: 80px;">
+                  </div>
+                  <div class="col-md-4 mb-3 mb-md-0">
+                    <h6 class="fw-bold mb-1">Pre-Entreno C4</h6>
+                    <small class="text-muted">185g - 30 porciones</small>
+                  </div>
+                  <div class="col-md-2 text-center mb-3 mb-md-0">
+                    <div class="cantidad-control justify-content-center">
+                      <button class="btn btn-sm btn-outline-secondary" onclick="cambiarCantidad(this, -1)">
+                        <i class="bi bi-dash"></i>
+                      </button>
+                      <span class="fw-bold" style="min-width: 30px; text-align: center;">2</span>
+                      <button class="btn btn-sm btn-outline-secondary" onclick="cambiarCantidad(this, 1)">
+                        <i class="bi bi-plus"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="col-md-2 text-center mb-3 mb-md-0">
+                    <div class="fw-bold text-green">L 1,560</div>
+                    <small class="text-muted">L 780 c/u</small>
+                  </div>
+                  <div class="col-md-2 text-center">
+                    <button class="btn btn-sm btn-outline-danger" onclick="eliminarProducto(this)">
+                      <i class="bi bi-trash"></i> Eliminar
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="producto-carrito">
+                <div class="row align-items-center">
+                  <div class="col-md-2 text-center mb-3 mb-md-0">
+                    <img src="/asset/img/creatina_evolution.png" alt="Creatina Evolution" class="img-fluid" style="max-width: 80px;">
+                  </div>
+                  <div class="col-md-4 mb-3 mb-md-0">
+                    <h6 class="fw-bold mb-1">Creatina Evolution</h6>
+                    <small class="text-muted">Monohidratada 500g</small>
+                  </div>
+                  <div class="col-md-2 text-center mb-3 mb-md-0">
+                    <div class="cantidad-control justify-content-center">
+                      <button class="btn btn-sm btn-outline-secondary" onclick="cambiarCantidad(this, -1)">
+                        <i class="bi bi-dash"></i>
+                      </button>
+                      <span class="fw-bold" style="min-width: 30px; text-align: center;">1</span>
+                      <button class="btn btn-sm btn-outline-secondary" onclick="cambiarCantidad(this, 1)">
+                        <i class="bi bi-plus"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="col-md-2 text-center mb-3 mb-md-0">
+                    <div class="fw-bold text-green">L 830</div>
+                    <small class="text-muted">L 830 c/u</small>
+                  </div>
+                  <div class="col-md-2 text-center">
+                    <button class="btn btn-sm btn-outline-danger" onclick="eliminarProducto(this)">
+                      <i class="bi bi-trash"></i> Eliminar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div id="carritoVacio" style="display: none;" class="carrito-vacio">
+              <i class="bi bi-bag-x"></i>
+              <h4 class="text-muted">Tu carrito está vacío</h4>
+              <p class="text-muted mb-4">Agrega productos para comenzar a comprar</p>
+              <a href="/plantillas/vitaminas.html" class="btn btn-green">
+                <i class="bi bi-bag-plus me-2"></i>Continuar Comprando
+              </a>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="mt-4 d-flex gap-2 flex-wrap">
+          <a href="/plantillas/vitaminas.html" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-2"></i>Continuar Comprando
+          </a>
+          <button class="btn btn-outline-danger" onclick="vaciarCarrito()">
+            <i class="bi bi-trash me-2"></i>Vaciar Carrito
+          </button>
+        </div>
+      </div>
+
+      <div class="col-lg-4">
+        <div class="card border-0 shadow-sm position-sticky" style="top: 20px;">
+          <div class="card-body">
+            <h5 class="text-green mb-4"><i class="bi bi-receipt me-2"></i>Resumen de Compra</h5>
+
+            <div class="resumen-carrito">
+              <div class="d-flex justify-content-between mb-3 pb-3 border-bottom">
+                <span>Subtotal (3 artículos):</span>
+                <span class="fw-bold">L 2,625</span>
+              </div>
+              <div class="d-flex justify-content-between mb-3 pb-3 border-bottom">
+                <span>Envío estimado:</span>
+                <span class="fw-bold">L 60</span>
+              </div>
+              <div class="d-flex justify-content-between mb-4 pb-4 border-bottom">
+                <span>Impuesto (15%):</span>
+                <span class="fw-bold">L 403</span>
+              </div>
+              <div class="d-flex justify-content-between">
+                <span class="fw-bold fs-5">Total:</span>
+                <span class="fw-bold fs-5 text-green">L 3,088</span>
+              </div>
+            </div>
+
+            <a href="/plantillas/checkout.html" class="btn btn-green w-100 mt-4 py-2 fw-bold">
+              <i class="bi bi-credit-card me-2"></i>Proceder a Pagar
+            </a>
+
+            <div class="alert alert-info mt-4 mb-0">
+              <small>
+                <i class="bi bi-shield-check me-2"></i>
+                <strong>Compra segura:</strong> Tus datos están protegidos con encriptación SSL.
+              </small>
+            </div>
+          </div>
+        </div>
+
+        <div class="card border-0 shadow-sm mt-4">
+          <div class="card-body">
+            <h6 class="fw-bold mb-3">
+              <i class="bi bi-percent me-2 text-green"></i>Cupón de Descuento
+            </h6>
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="Código de cupón">
+              <button class="btn btn-outline-secondary" type="button">Aplicar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="text-white mt-5 pt-4 pb-2">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4">
+          <h5>NutriShop</h5>
+          <p>Tu tienda de confianza para suplementos <br> deportivos y nutricionales de la más alta calidad.</p>
+        </div>
+
+        <div class="col-md-3 offset-md-1">
+          <h5>Enlaces Rápidos</h5>
+          <ul class="list-unstyled">
+            <li><a href="#" class="text-white text-decoration-none">Sobre Nosotros</a></li>
+            <li><a href="#" class="text-white text-decoration-none">Contacto</a></li>
+          </ul>
+        </div>
+
+        <div class="col-md-3 offset-md-1">
+          <h5>Categorías</h5>
+          <ul class="list-unstyled">
+            <li><a href="#" class="text-white text-decoration-none">Proteínas</a></li>
+            <li><a href="#" class="text-white text-decoration-none">Quemadores</a></li>
+            <li><a href="#" class="text-white text-decoration-none">Pre-Entreno</a></li>
+            <li><a href="#" class="text-white text-decoration-none">Vitaminas</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <hr class="bg-white">
+
+      <div class="container">
+        <div class="row text-center text-md-start gy-2">
+          <div class="col-12 col-md-6">
+            <p class="mb-0">© 2025 NutriShop. Todos los derechos reservados.</p>
+          </div>
+          <div class="col-12 col-md-6 text-md-end">
+            <p class="mb-0">Desarrolladores: Truman Castañeda, Alberto Colindres, Christopher Martínez</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/carrito.js"></script>
+
+</body>
+</html>
