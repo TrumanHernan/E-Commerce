@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Proteínas</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="/asset/css/categorias.css">
+</head>
+
+<body>
+
+    <!--Header-->
+    <header class="bg-white border-bottom">
+        <div class="container py-4 px-3">
+          <div class="row align-items-center gy-3">
+            
+            <!-- Logo -->
+            <div class="col-12 col-md-auto text-center text-md-start">
+              <a href="#" class="text-decoration-none">
+                <h1 class="h2 fw-bold m-0">
+                  <span id="spanlogo">Nutri</span><span class="logo-shop">Shop</span>
+                </h1>
+              </a>
+            </div>
+      
+            <!-- Buscador -->
+            <div class="col-12 col-md text-center text-md-start">
+              <form class="d-flex justify-content-center justify-content-md-start" role="search" style="max-width: 500px; margin: 0 auto;">
+                <input class="form-control form-control-lg me-2 bg-light border-0" type="search" placeholder="Buscar productos..." aria-label="Buscar">
+                <button class="btn btn-success w-25" type="submit">Buscar</button>
+              </form>
+            </div>
+      
+            <!-- Iconos -->
+            <div class="col-12 col-md-auto d-flex justify-content-center justify-content-md-end gap-3">
+              <a href="/favoritos" class="iconos-header" aria-label="Favoritos">
+                <i class="bi bi-heart fs-4"></i>
+              </a>
+              <a href="/perfil" class="iconos-header" aria-label="Mi Cuenta">
+                <i class="bi bi-person fs-4"></i>
+              </a>
+              <a href="/carrito" class="text-decoration-none position-relative iconos-header" aria-label="Carrito de compras">
+                <span class="position-absolute badge rounded-pill bg-success fw-bold" style="top: -5px; right: -5px; font-size: 0.75rem;">0</span>
+                <i class="bi bi-cart fs-3"></i>
+                <small class="text-dark d-block">Carrito</small>
+              </a>
+            </div>
+          </div>
+        </div>
+      
+        <!-- Navegación con hamburguesa -->
+        <nav class="navbar navbar-expand-lg bg-white border-top">
+          <div class="container">
+            <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNutri" aria-controls="navbarNutri" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+      
+            <div class="collapse navbar-collapse justify-content-center" id="navbarNutri">
+              <div class="d-flex flex-wrap justify-content-center py-3">
+                <a href="#" class="text-decoration-none nav-link-custom mx-4"><i class="bi bi-house-door me-1"></i> Inicio</a>
+                <a href="/categorias" class="text-decoration-none nav-link-custom mx-4"><i class="bi bi-grid me-1"></i> Categorías</a>
+                <a href="/productos" class="text-decoration-none nav-link-custom mx-4"><i class="bi bi-box-seam me-1"></i> Productos</a>
+                <a href="/ofertas" class="text-decoration-none nav-link-custom mx-4"><i class="bi bi-tags me-1"></i> Ofertas</a>
+                <a href="/nosotros" class="text-decoration-none nav-link-custom mx-4"><i class="bi bi-people me-1"></i> Nosotros</a>
+              </div>
+            </div>
+          </div>
+        </nav>
+      </header>
+
+  <!-- Contenido Principal -->
+  <main class="container my-5">
+    <h2 class="mb-4">Creatinas</h2>
+
+    <div class="row g-4">
+
+      <!-- Tarjeta 1 -->
+      <div class="col-12 col-sm-6 col-md-4">
+
+        <div class="card h-100">
+
+          <div class="position-absolute top-0 end-0 p-2">
+            <i class="bi bi-heart text-secondary fs-4 favorito" style="cursor: pointer;"></i>
+          </div>
+
+          <img src="/asset/img/creatina_epiq.png" class="card-img-top" alt="Creatina">
+
+          <div class="card-body">
+            <h5 class="card-title">Creatina Epiq Monohidratada</h5>
+            <p class="card-text">Cratina de 120 serving de 5 gramos equivalente a 4 meses</p>
+
+            <hr class="my-4">
+
+            <p class="fw-bold fs-5 fst-italic text-success">L 1235</p>
+            <button class="btn btn-success agregar-carrito"><i class="bi bi-cart-check"></i> Agregar al carrito</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Tarjeta 2 -->
+      <div class="col-12 col-sm-6 col-md-4">
+        <div class="card h-100">
+
+          <div class="position-absolute top-0 end-0 p-2">
+            <i class="bi bi-heart text-secondary fs-4 favorito" style="cursor: pointer;"></i>
+          </div>          
+
+          <img src="/asset/img/creatine_basic.png" class="card-img-top" alt="Creatina">
+
+          <div class="card-body">
+            <h5 class="card-title">Creatina Basic Monohidratada</h5>
+            <p class="card-text">Creatina de 60 Serving de 5 gramos equivalente a 2 meses</p>
+
+            <hr class="my-4">
+
+            <p class="fw-bold fs-5 fst-italic text-success">L 980</p>
+            <button class="btn btn-success agregar-carrito"><i class="bi bi-cart-check"></i> Agregar al carrito</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Tarjeta 3 -->
+      <div class="col-12 col-sm-6 col-md-4">
+        <div class="card h-100">
+
+          <div class="position-absolute top-0 end-0 p-2">
+            <i class="bi bi-heart text-secondary fs-4 favorito" style="cursor: pointer;"></i>
+          </div>          
+          
+          <img src="/asset/img/creatina_evolution.png" class= "card-img-top" alt="Creatina">
+
+          <div class="card-body">
+            <h5 class="card-title">Creatina Evolution Monohidratada</h5>
+            <p class="card-text">Creatina de 60 serving de 5 gramos equivalente a 2 meses</p>
+
+            <hr class="my-4">
+
+            <p class="fw-bold fs-5 fst-italic text-success">L 830</p>
+            <button class="btn btn-success agregar-carrito"><i class="bi bi-cart-check"></i> Agregar al carrito</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="text-white mt-5 pt-4 pb-2">
+    <div class="container">
+      <div class="row">
+
+        <div class="col-md-4">
+          <h5>NutriShop</h5>
+          <p>Tu tienda de confianza para suplementos <br> deportivos y nutricionales de la más alta calidad.</p>
+        </div>
+
+        <div class="col-md-3 offset-md-1">
+          <h5>Enlaces Rápidos</h5>
+          <ul class="list-unstyled">
+            <li><a href="#" class="text-white text-decoration-none">Sobre Nosotros</a></li>
+            <li><a href="#" class="text-white text-decoration-none">Contacto</a></li>
+          </ul>
+        </div>
+
+        <div class="col-md-3 offset-md-1">
+          <h5>Categorías</h5>
+          <ul class="list-unstyled">
+            <li><a href="#" class="text-white text-decoration-none">Proteínas</a></li>
+            <li><a href="#" class="text-white text-decoration-none">Quemadores</a></li>
+            <li><a href="#" class="text-white text-decoration-none">Pre-Entreno</a></li>
+            <li><a href="#" class="text-white text-decoration-none">Vitaminas</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <hr class="bg-white">
+
+      <div class="container">
+        <div class="row text-center text-md-start gy-2">
+          <div class="col-12 col-md-6">
+            <p class="mb-0">© 2025 NutriShop. Todos los derechos reservados.</p>
+          </div>
+          <div class="col-12 col-md-6 text-md-end">
+            <p class="mb-0">Desarrolladores: Truman Castañeda, Alberto Colindres, Christopher Martínez</p>
+          </div>
+        </div>
+      </div>  
+
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/categorias.js"></script>
+
+</body>
+</html>
