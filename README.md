@@ -28,3 +28,9 @@
 16. pagos  
 17. seguimiento_pedidos
 18. dashboard_reportes 
+
+- *Secciones del Ecommerce:*
+    - Pagina Principal
+    - Pagina con sus categorias (Proteinas, Creatinas, Pre-entrenos y Vitaminas)
+    - Login y Registro
+    - Recuperar Contraseña
