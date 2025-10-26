@@ -1,40 +1,38 @@
 // Funcion anonima
 document.addEventListener("DOMContentLoaded", () => {
-    // Validacion del formulario de login
-    const loginForm = document.querySelector("#iniciar form");
-    loginForm.addEventListener("submit", (e) => {
+
+  // Validacion del formulario de login
+  const loginForm = document.querySelector("#iniciar form");
+  loginForm.addEventListener("submit", (e) => {
       e.preventDefault();
-        
-      // Obtenemos lo que el usuario ingreso.
+      
+      // Obtenemos lo que el usuario ingreso
       const correo = document.getElementById("correo").value.trim();
       const contraseña = document.getElementById("contrasena").value.trim();
 
-      // Establecemos usuario y contraseña correcta para poder ingresar
-      CorreoCorrecto = "trumanhernan@gmail.com";
-      ContraseñaCorrecta = "123456"
-        
-      //Validaciones
-      if (correo === ""  || contrasena === "") {
-        alert("No pueden haber campos vacios.");
-        return;
+      if (correo === "" || contraseña === "") {
+          alert("No pueden haber campos vacios.");
+          return;
       }
 
-      // Simulacion de inicio de sesión
-      if(correo === CorreoCorrecto && contraseña === ContraseñaCorrecta){
-        alert("Inicio de sesión exitoso.");
-        window.location.href = "/plantillas/dashboard.html";
+      // Obtenemos los usuarios guardados en localStorage
+      const usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+      const usuarioValido = usuarios.find(u => u.correo === correo && u.contraseña === contraseña);
+
+      if (usuarioValido) {
+          alert(`Inicio de sesion exitoso. Bienvenido ${usuarioValido.nombre}.`);
+          window.location.href = "/plantillas/dashboard.html";
+      } else {
+          alert("Correo o Contraseña incorrectos");
       }
-      else{
-        alert("Correo o Contraseña Incorrectos")
-      }
-    });
-  
-    // Validacion del formulario de registro
-    const registroForm = document.querySelector("#registrar form");
-    registroForm.addEventListener("submit", (e) => {
+  });
+
+  // Validacion del formulario de registro
+  const registroForm = document.querySelector("#registrar form");
+  registroForm.addEventListener("submit", (e) => {
       e.preventDefault();
-    
-      // Obtenemos lo que el usuario ingreso.
+
+      // Obtenemos lo que el usuario ingreso
       const nombre = document.getElementById("nombre").value.trim();
       const correo = document.getElementById("correo-registro").value.trim();
       const contraseña = document.getElementById("contrasena-registro").value.trim();
@@ -43,26 +41,39 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Validaciones
       if (nombre === "" || correo === "") {
-        alert("Por favor ingresa tu nombre.");
-        return;
+          alert("Por favor ingresa tu nombre.");
+          return;
       }
-  
+
       if (contraseña.length < 6) {
-        alert("La contraseña debe tener al menos 6 caracteres.");
-        return;
+          alert("La contraseña debe tener al menos 6 caracteres.");
+          return;
       }
-  
+
       if (contraseña !== confirmar) {
-        alert("Las contraseñas no coinciden.");
-        return;
+          alert("Las contrasenas no coinciden.");
+          return;
       }
-  
+
       if (!terminos) {
-        alert("Debes aceptar los términos y condiciones.");
-        return;
+          alert("Debes aceptar los terminos y condiciones.");
+          return;
       }
+
+      // Guardar registro en localStorage
+      let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+
+      // Evitar duplicados por correo
+      if (usuarios.some(u => u.correo === correo)) {
+          alert("Este correo ya esta registrado.");
+          return;
+      }
+
+      usuarios.push({ nombre, correo, contraseña });
+      localStorage.setItem("usuarios", JSON.stringify(usuarios));
 
       alert("Registro exitoso.");
       document.querySelector('#pestana-iniciar').click();
-    });
   });
+
+});

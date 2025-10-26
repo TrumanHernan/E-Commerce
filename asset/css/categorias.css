@@ -71,6 +71,17 @@
     transform: scale(0.9); 
 }
 
+.card {
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+/*Tarjetas Hover*/
+.card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+  
+
 /* Responsive Para pantallas menores a 576px */
 @media (max-width: 575.98px) {
     .card {
