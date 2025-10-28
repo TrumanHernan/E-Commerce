@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Dashboard - NutriShop Admin</title>
+  <title>Inventario - NutriShop Admin</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
   <link rel="stylesheet" href="/asset/css/dashboard.css">
@@ -21,7 +21,7 @@
 
       <ul class="sidebar-nav">
         <li>
-          <a href="/plantillas/dashboard.html" class="active">
+          <a href="/plantillas/dashboard.html">
             <i class="bi bi-speedometer2"></i>
             <span>Dashboard</span>
           </a>
@@ -39,7 +39,7 @@
           </a>
         </li>
         <li>
-          <a href="/plantillas/inventario.html">
+          <a href="/plantillas/inventario.html" class="active">
             <i class="bi bi-clipboard-data"></i>
             <span>Inventario</span>
           </a>
@@ -62,9 +62,11 @@
     <main class="main-content">
 
       <div class="page-header">
-        <h1>Dashboard</h1>
-        <p>Bienvenido al panel de administración de NutriShop</p>
+        <h1>Gestión de Inventario</h1>
+        <p>Controla el stock de tus productos y recibe alertas</p>
       </div>
+
+      <div id="alertasContainer"></div>
 
       <div class="stats-grid">
 
@@ -75,17 +77,17 @@
             </div>
           </div>
           <div class="stat-card-value" id="totalProductos">0</div>
-          <div class="stat-card-label">Total Productos</div>
+          <div class="stat-card-label">Total de Productos</div>
         </div>
 
         <div class="stat-card">
           <div class="stat-card-header">
             <div class="stat-card-icon blue">
-              <i class="bi bi-clipboard-data"></i>
+              <i class="bi bi-stack"></i>
             </div>
           </div>
-          <div class="stat-card-value" id="valorInventario">L 0</div>
-          <div class="stat-card-label">Valor del Inventario</div>
+          <div class="stat-card-value" id="unidadesTotales">0</div>
+          <div class="stat-card-label">Unidades en Stock</div>
         </div>
 
         <div class="stat-card">
@@ -95,68 +97,90 @@
             </div>
           </div>
           <div class="stat-card-value" id="stockBajo">0</div>
-          <div class="stat-card-label">Productos Bajo Stock</div>
+          <div class="stat-card-label">Stock Bajo</div>
         </div>
 
         <div class="stat-card">
           <div class="stat-card-header">
             <div class="stat-card-icon red">
-              <i class="bi bi-people"></i>
+              <i class="bi bi-x-circle"></i>
             </div>
           </div>
-          <div class="stat-card-value" id="totalProveedores">0</div>
-          <div class="stat-card-label">Proveedores Activos</div>
-        </div>
-
-      </div>
-
-      <div class="row">
-
-        <div class="col-md-6">
-          <div class="content-card">
-            <div class="content-card-header">
-              <h2>Productos Bajo Stock</h2>
-              <a href="/plantillas/inventario.html" class="btn-outline-green">Ver Todo</a>
-            </div>
-            <div id="productosStockBajo"></div>
-          </div>
-        </div>
-
-        <div class="col-md-6">
-          <div class="content-card">
-            <div class="content-card-header">
-              <h2>Compras Recientes</h2>
-              <a href="/plantillas/compras.html" class="btn-outline-green">Ver Todo</a>
-            </div>
-            <div id="comprasRecientes"></div>
-          </div>
+          <div class="stat-card-value" id="stockCritico">0</div>
+          <div class="stat-card-label">Stock Crítico</div>
         </div>
 
       </div>
 
       <div class="content-card">
+
         <div class="content-card-header">
-          <h2>Productos Más Vendidos</h2>
+          <h2>Control de Stock</h2>
+          <div>
+            <select id="filtroEstado" style="padding: 8px 15px; border: 1px solid #cbd5e1; border-radius: 5px; margin-right: 10px;">
+              <option value="">Todos los productos</option>
+              <option value="critico">Stock Crítico (&lt;5)</option>
+              <option value="bajo">Stock Bajo (&lt;10)</option>
+              <option value="normal">Stock Normal (&gt;=10)</option>
+            </select>
+          </div>
         </div>
+
         <div class="table-container">
           <table class="data-table">
             <thead>
               <tr>
                 <th>Producto</th>
                 <th>Categoría</th>
+                <th>Stock Actual</th>
+                <th>Estado</th>
                 <th>Precio</th>
-                <th>Stock</th>
-                <th>Ventas</th>
+                <th>Valor Total</th>
+                <th>Acciones</th>
               </tr>
             </thead>
-            <tbody id="topProductos">
+            <tbody id="tablaInventario">
             </tbody>
           </table>
         </div>
+
       </div>
 
     </main>
 
+  </div>
+
+  <div id="modalAjustar" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Ajustar Stock</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <p><strong>Producto:</strong> <span id="modalProductoNombre"></span></p>
+          <p><strong>Stock Actual:</strong> <span id="modalStockActual"></span></p>
+          <div class="form-group">
+            <label for="modalNuevoStock">Nuevo Stock</label>
+            <input type="number" id="modalNuevoStock" class="form-control" min="0" required>
+          </div>
+          <div class="form-group">
+            <label for="modalMotivo">Motivo del Ajuste</label>
+            <select id="modalMotivo" class="form-control">
+              <option value="entrada">Entrada de mercancía</option>
+              <option value="salida">Salida de mercancía</option>
+              <option value="devolucion">Devolución</option>
+              <option value="ajuste">Ajuste de inventario</option>
+              <option value="perdida">Pérdida o daño</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn-green" onclick="guardarAjuste()">Guardar Cambios</button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <footer class="text-white mt-5 pt-4 pb-2">
@@ -204,7 +228,7 @@
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="/js/dashboard.js"></script>
+  <script src="/js/inventario.js"></script>
 
 </body>
 </html>
