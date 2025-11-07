@@ -1,3 +1,4 @@
+<?php include('../php/ValidatorUser.php'); ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -41,17 +42,17 @@
 
           <!-- Formulario de inicio de sesión -->
           <div class="tab-pane fade show active" id="iniciar" role="tabpanel">
-            <form>
+            <form method="post" action="">
               <div class="mb-3">
                 <label for="correo" class="form-label">Correo Electrónico</label>
-                <input type="email" class="form-control" id="correo" placeholder="ejemplo@correo.com">
+                <input type="email" class="form-control" id="correo" name="correo" placeholder="ejemplo@correo.com">
               </div>
               <div class="mb-3">
                 <label for="contrasena" class="form-label">Contraseña</label>
-                <input type="password" class="form-control" id="contrasena" placeholder="********">
+                <input type="password" class="form-control" name="pass" id="contrasena" placeholder="********">
               </div>
               <div class="mb-3 form-check">
-                <input type="checkbox" class="form-check-input" id="recordar">
+                <input type="checkbox" class="form-check-input" id="recordar" name="recordar">
                 <label class="form-check-label" for="recordar">Recordarme</label>
               </div>
               <div class="mb-3 text-end">
@@ -64,6 +65,10 @@
 
             <button class="btn btn-outline-dark btn-social"><i class="bi bi-google"></i> Continuar con Google</button>
             <button class="btn btn-outline-primary btn-social"><i class="bi bi-facebook"></i> Continuar con Facebook</button>
+          </div>
+
+          <div id="mensaje-error" class="text-danger mb-3">
+            <?php if(isset($error)) { echo $error; } ?>
           </div>
 
           <!-- Formulario de registro -->

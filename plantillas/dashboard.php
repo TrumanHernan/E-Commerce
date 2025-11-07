@@ -1,3 +1,20 @@
+<?php
+session_start();
+include('../php/conn.php'); // si necesitas conexión a la DB en dashboard
+
+// Verificar si existe la cookie "recordarme"
+if(isset($_COOKIE['id_usuario']) && isset($_COOKIE['nombre'])) {
+    $_SESSION['id_usuario'] = $_COOKIE['id_usuario'];
+    $_SESSION['nombre'] = $_COOKIE['nombre'];
+}
+
+// Si no hay sesión activa, redirigir al login
+if(!isset($_SESSION['id_usuario'])) {
+    header("Location: ../plantillas/login.php");
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -21,7 +38,7 @@
 
       <ul class="sidebar-nav">
         <li>
-          <a href="/plantillas/dashboard.html" class="active">
+          <a href="/plantillas/dashboard.php" class="active">
             <i class="bi bi-speedometer2"></i>
             <span>Dashboard</span>
           </a>
@@ -61,9 +78,10 @@
 
     <main class="main-content">
 
+    <!--Mensaje de Bienvenida-->
       <div class="page-header">
         <h1>Dashboard</h1>
-        <p>Bienvenido al panel de administración de NutriShop</p>
+        <p>Bienvenido, <strong><?php echo $_SESSION['nombre']; ?></strong> - Rol: <em><?php echo $_SESSION['rol']; ?></em></p>
       </div>
 
       <div class="stats-grid">
@@ -116,7 +134,7 @@
           <div class="content-card">
             <div class="content-card-header">
               <h2>Productos Bajo Stock</h2>
-              <a href="/plantillas/inventario.html" class="btn-outline-green">Ver Todo</a>
+              <a href="/plantillas/inventario.php" class="btn-outline-green">Ver Todo</a>
             </div>
             <div id="productosStockBajo"></div>
           </div>
@@ -126,7 +144,7 @@
           <div class="content-card">
             <div class="content-card-header">
               <h2>Compras Recientes</h2>
-              <a href="/plantillas/compras.html" class="btn-outline-green">Ver Todo</a>
+              <a href="/plantillas/compras.php" class="btn-outline-green">Ver Todo</a>
             </div>
             <div id="comprasRecientes"></div>
           </div>

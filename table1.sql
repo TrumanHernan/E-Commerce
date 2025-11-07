@@ -1,5 +1,5 @@
-create database proyecto1
-use proyecto1
+
+USE proyecto_suplementos;
 
 CREATE TABLE usuarios (
   id_usuario INT NOT NULL AUTO_INCREMENT,
