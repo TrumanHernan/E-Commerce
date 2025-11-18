@@ -16,8 +16,15 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
+        $user = $request->user()->loadCount([
+            'pedidos',
+            'favoritos',
+        ]);
+
+        $user->load(['carrito.items']);
+
         return view('profile.edit', [
-            'user' => $request->user(),
+            'user' => $user,
         ]);
     }
 

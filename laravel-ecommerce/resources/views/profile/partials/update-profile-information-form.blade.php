@@ -1,64 +1,85 @@
-<section>
-    <header>
-        <h2 class="text-lg font-medium text-gray-900">
-            {{ __('Profile Information') }}
-        </h2>
-
-        <p class="mt-1 text-sm text-gray-600">
-            {{ __("Update your account's profile information and email address.") }}
-        </p>
-    </header>
+<div class="space-y-6">
+    <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <div>
+            <p class="text-xs font-semibold uppercase tracking-[0.4em] text-emerald-500">Información personal</p>
+            <h2 class="mt-2 text-2xl font-semibold text-slate-900">Datos de tu cuenta</h2>
+            <p class="text-sm text-slate-500">
+                Mantén tu nombre y correo actualizados para recibir notificaciones importantes sin contratiempos.
+            </p>
+        </div>
+    </div>
 
     <form id="send-verification" method="post" action="{{ route('verification.send') }}">
         @csrf
     </form>
 
-    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
+    <form method="post" action="{{ route('profile.update') }}" class="space-y-6">
         @csrf
         @method('patch')
 
-        <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name" />
-            <x-input-error class="mt-2" :messages="$errors->get('name')" />
+        <div class="grid gap-6 md:grid-cols-2">
+            <div class="space-y-2">
+                <label for="name" class="text-sm font-semibold text-slate-700">Nombre completo</label>
+                <input
+                    id="name"
+                    name="name"
+                    type="text"
+                    value="{{ old('name', $user->name) }}"
+                    required
+                    autocomplete="name"
+                    class="w-full rounded-2xl border border-slate-200 bg-slate-50/80 px-4 py-3 text-slate-900 shadow-inner focus:border-[#11BF6E] focus:ring-[#11BF6E]"
+                >
+                <x-input-error class="mt-1" :messages="$errors->get('name')" />
+            </div>
+
+            <div class="space-y-2">
+                <label for="email" class="text-sm font-semibold text-slate-700">Correo electrónico</label>
+                <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    value="{{ old('email', $user->email) }}"
+                    required
+                    autocomplete="username"
+                    class="w-full rounded-2xl border border-slate-200 bg-slate-50/80 px-4 py-3 text-slate-900 shadow-inner focus:border-[#11BF6E] focus:ring-[#11BF6E]"
+                >
+                <x-input-error class="mt-1" :messages="$errors->get('email')" />
+            </div>
         </div>
 
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)" required autocomplete="username" />
-            <x-input-error class="mt-2" :messages="$errors->get('email')" />
-
-            @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
-                <div>
-                    <p class="text-sm mt-2 text-gray-800">
-                        {{ __('Your email address is unverified.') }}
-
-                        <button form="send-verification" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                            {{ __('Click here to re-send the verification email.') }}
-                        </button>
-                    </p>
-
-                    @if (session('status') === 'verification-link-sent')
-                        <p class="mt-2 font-medium text-sm text-green-600">
-                            {{ __('A new verification link has been sent to your email address.') }}
-                        </p>
-                    @endif
-                </div>
-            @endif
-        </div>
-
-        <div class="flex items-center gap-4">
-            <x-primary-button>{{ __('Save') }}</x-primary-button>
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-center">
+            <button type="submit" class="inline-flex items-center justify-center rounded-2xl bg-[#11BF6E] px-6 py-3 text-sm font-semibold uppercase tracking-wide text-white shadow-lg shadow-emerald-200 transition hover:scale-[1.01]">
+                Guardar cambios
+            </button>
 
             @if (session('status') === 'profile-updated')
                 <p
                     x-data="{ show: true }"
                     x-show="show"
                     x-transition
-                    x-init="setTimeout(() => show = false, 2000)"
-                    class="text-sm text-gray-600"
-                >{{ __('Saved.') }}</p>
+                    x-init="setTimeout(() => show = false, 3000)"
+                    class="text-sm font-semibold text-emerald-600"
+                >Información actualizada</p>
             @endif
         </div>
     </form>
-</section>
+
+    @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
+        <div class="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
+            <p class="font-semibold">Tu correo aún no ha sido verificado.</p>
+            <p class="mt-1">Revisa tu bandeja o pide un nuevo enlace:</p>
+            <div class="mt-3 flex flex-col gap-2 sm:flex-row sm:items-center">
+                <button
+                    form="send-verification"
+                    class="inline-flex items-center justify-center rounded-2xl border border-amber-400 px-4 py-2 text-sm font-semibold text-amber-900 transition hover:bg-amber-100"
+                >
+                    Enviar enlace de verificación
+                </button>
+
+                @if (session('status') === 'verification-link-sent')
+                    <span class="text-xs font-semibold uppercase tracking-widest text-emerald-600">Reenviamos el enlace ✅</span>
+                @endif
+            </div>
+        </div>
+    @endif
+</div>
