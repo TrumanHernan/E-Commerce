@@ -52,7 +52,7 @@
           @endauth
           <a href="{{ route('carrito.index') }}" class="text-decoration-none position-relative iconos-header" aria-label="Carrito de compras">
             @auth
-              <span class="position-absolute badge rounded-pill bg-success fw-bold" style="top: -5px; right: -5px; font-size: 0.75rem;" id="contadorCarrito">{{ auth()->user()->carrito->items->sum('cantidad') ?? 0 }}</span>
+              <span class="position-absolute badge rounded-pill bg-success fw-bold" style="top: -5px; right: -5px; font-size: 0.75rem;" id="contadorCarrito">{{ optional(auth()->user()->carrito)->items ? auth()->user()->carrito->items->sum('cantidad') : 0 }}</span>
             @else
               <span class="position-absolute badge rounded-pill bg-success fw-bold" style="top: -5px; right: -5px; font-size: 0.75rem;" id="contadorCarrito">0</span>
             @endauth

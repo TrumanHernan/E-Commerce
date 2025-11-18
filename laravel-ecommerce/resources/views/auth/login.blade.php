@@ -101,12 +101,12 @@
 
                     <hr class="my-4">
 
-                    <button class="btn btn-outline-dark btn-social" type="button">
+                    <a href="{{ route('social.redirect', 'google') }}" class="btn btn-outline-dark btn-social">
                         <i class="bi bi-google"></i> Continuar con Google
-                    </button>
-                    <button class="btn btn-outline-primary btn-social" type="button">
+                    </a>
+                    <a href="{{ route('social.redirect', 'facebook') }}" class="btn btn-outline-primary btn-social">
                         <i class="bi bi-facebook"></i> Continuar con Facebook
-                    </button>
+                    </a>
                 </div>
 
                 <div id="mensaje-error" class="text-danger mb-3">
@@ -190,12 +190,12 @@
 
                         <hr class="my-4">
 
-                        <button class="btn btn-outline-dark btn-social" type="button">
+                        <a href="{{ route('social.redirect', 'google') }}" class="btn btn-outline-dark btn-social">
                             <i class="bi bi-google"></i> Registrarse con Google
-                        </button>
-                        <button class="btn btn-outline-primary btn-social" type="button">
+                        </a>
+                        <a href="{{ route('social.redirect', 'facebook') }}" class="btn btn-outline-primary btn-social">
                             <i class="bi bi-facebook"></i> Registrarse con Facebook
-                        </button>
+                        </a>
                     </div>
                 @endif
             </div>

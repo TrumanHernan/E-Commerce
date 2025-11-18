@@ -8,6 +8,7 @@ use App\Http\Controllers\FavoritoController;
 use App\Http\Controllers\PedidoController;
 use App\Http\Controllers\ProveedorController;
 use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\Auth\SocialAuthController;
 use Illuminate\Support\Facades\Route;
 
 // Ruta principal (Home)
@@ -16,6 +17,10 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 // Rutas públicas de productos
 Route::get('/productos', [ProductoController::class, 'index'])->name('productos.index');
 Route::get('/productos/{producto:slug}', [ProductoController::class, 'show'])->name('productos.show');
+
+// Rutas de autenticación social
+Route::get('/auth/{provider}/redirect', [SocialAuthController::class, 'redirectToProvider'])->name('social.redirect');
+Route::get('/auth/{provider}/callback', [SocialAuthController::class, 'handleProviderCallback'])->name('social.callback');
 
 // Rutas de usuario autenticado
 Route::middleware('auth')->group(function () {
