@@ -76,12 +76,12 @@
       @forelse($productosDestacados as $producto)
         <div class="col-6 col-md-3">
           <div class="card h-100 border-0 shadow-sm producto-card">
-            <a href="{{ route('productos.show', $producto) }}">
+            <a href="{{ route('productos.show', $producto->slug) }}">
               <img src="{{ asset('storage/productos/' . $producto->imagen) }}" class="card-img-top p-3" alt="{{ $producto->nombre }}" style="background-color: white; height: 200px; object-fit: contain;">
             </a>
             <div class="card-body d-flex flex-column">
               <h6 class="card-title">
-                <a href="{{ route('productos.show', $producto) }}" class="text-decoration-none text-dark">{{ $producto->nombre }}</a>
+                <a href="{{ route('productos.show', $producto->slug) }}" class="text-decoration-none text-dark">{{ $producto->nombre }}</a>
               </h6>
               <p class="card-text text-muted small mb-2">{{ Str::limit($producto->descripcion, 60) }}</p>
               <div class="mt-auto">
@@ -93,8 +93,9 @@
                 @else
                   <p class="card-text text-success fw-bold fs-5 mb-2">L {{ number_format($producto->precio, 2) }}</p>
                 @endif
-                <form action="{{ route('carrito.agregar', $producto) }}" method="POST">
+                <form action="{{ route('carrito.agregar') }}" method="POST">
                   @csrf
+                  <input type="hidden" name="producto_id" value="{{ $producto->id }}">
                   <input type="hidden" name="cantidad" value="1">
                   <button type="submit" class="btn btn-success w-100">
                     <i class="bi bi-cart-plus me-1"></i>Agregar al carrito
@@ -117,6 +118,3 @@
 </main>
 @endsection
 
-@push('scripts')
-<script src="{{ asset('js/index.js') }}"></script>
-@endpush

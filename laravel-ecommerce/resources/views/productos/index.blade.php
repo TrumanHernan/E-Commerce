@@ -11,8 +11,8 @@
           {{ request('categoria') }}
         @elseif(request('ofertas'))
           Ofertas Especiales
-        @elseif(request('buscar'))
-          Resultados de búsqueda: "{{ request('buscar') }}"
+        @elseif(request('busqueda'))
+          Resultados de búsqueda: "{{ request('busqueda') }}"
         @else
           Todos los Productos
         @endif
@@ -35,14 +35,11 @@
             <!-- Filtro por Categoría -->
             <div class="mb-4">
               <h6 class="fw-bold mb-3">Categoría</h6>
-              @php
-                $categorias = ['Proteinas', 'Creatinas', 'Pre-Entreno', 'Vitaminas', 'Aminoacidos', 'Ganadores de Peso', 'Quemadores'];
-              @endphp
               @foreach($categorias as $cat)
                 <div class="form-check mb-2">
-                  <input class="form-check-input" type="radio" name="categoria" value="{{ $cat }}" id="cat{{ $loop->index }}" {{ request('categoria') == $cat ? 'checked' : '' }} onchange="this.form.submit()">
-                  <label class="form-check-label" for="cat{{ $loop->index }}">
-                    {{ $cat }}
+                  <input class="form-check-input" type="radio" name="categoria" value="{{ $cat->nombre }}" id="cat{{ $cat->id }}" {{ request('categoria') == $cat->nombre ? 'checked' : '' }} onchange="this.form.submit()">
+                  <label class="form-check-label" for="cat{{ $cat->id }}">
+                    {{ $cat->nombre }}
                   </label>
                 </div>
               @endforeach

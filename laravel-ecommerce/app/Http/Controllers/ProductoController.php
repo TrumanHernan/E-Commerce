@@ -15,13 +15,22 @@ class ProductoController extends Controller
      */
     public function index(Request $request)
     {
-        $categoria_id = $request->get('categoria');
+        $categoriaParam = $request->get('categoria');
         $busqueda = $request->get('busqueda');
 
         $query = Producto::with('categoria')->where('activo', true);
 
-        if ($categoria_id) {
-            $query->where('categoria_id', $categoria_id);
+        // Filtrar por categoría (acepta ID o nombre)
+        if ($categoriaParam) {
+            // Si es numérico, buscar por ID
+            if (is_numeric($categoriaParam)) {
+                $query->where('categoria_id', $categoriaParam);
+            } else {
+                // Si es texto, buscar por nombre de categoría
+                $query->whereHas('categoria', function($q) use ($categoriaParam) {
+                    $q->where('nombre', 'like', $categoriaParam);
+                });
+            }
         }
 
         if ($busqueda) {
