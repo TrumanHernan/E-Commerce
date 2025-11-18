@@ -1,99 +1,258 @@
-<x-app-layout>
-    @php
-        $initial = strtoupper(mb_substr($user->name ?? 'N', 0, 1));
-        $memberSince = $user->created_at
-            ? $user->created_at->copy()->locale(app()->getLocale())->translatedFormat('d \\d\\e F \\d\\e Y')
-            : null;
-        $pedidosCount = $user->pedidos_count ?? $user->pedidos()->count();
-        $favoritosCount = $user->favoritos_count ?? $user->favoritos()->count();
-        $cartItems = optional($user->carrito)->items
-            ? $user->carrito->items->sum('cantidad')
-            : 0;
-        $emailVerified = ! is_null($user->email_verified_at);
-    @endphp
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi Perfil - NutriShop</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{ asset('css/perfil.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
+</head>
+<body>
 
-    <section class="relative isolate overflow-hidden bg-gradient-to-r from-[#11BF6E] to-emerald-600 text-white">
-        <div class="max-w-6xl mx-auto px-6 py-12 lg:px-10">
-            <p class="text-xs font-semibold uppercase tracking-[0.5em] text-white/80">Panel personal</p>
-            <h1 class="mt-3 text-4xl font-semibold lg:text-5xl">Mi perfil</h1>
-            <p class="mt-4 max-w-2xl text-lg text-white/90">
-                Consulta tu información, revisa tus métricas y mantén tu cuenta segura con el estilo fresco de NutriShop.
-            </p>
+  <div class="dashboard-container">
+
+    @include('components.sidebar')
+
+    <main class="main-content">
+
+      @if(session('status') === 'profile-updated')
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <i class="bi bi-check-circle me-2"></i>Perfil actualizado correctamente
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-        <div class="pointer-events-none absolute -right-16 top-0 h-64 w-64 rounded-full bg-white/10 blur-3xl"></div>
-    </section>
+      @endif
 
-    <section class="-mt-16 bg-gray-50 pb-16 pt-4 sm:pt-8">
-        <div class="mx-auto grid max-w-6xl gap-8 px-4 sm:px-6 lg:grid-cols-[1.05fr,1.95fr] lg:px-8">
-            <div class="rounded-3xl border border-emerald-100 bg-white p-8 shadow-xl">
-                <div class="text-center">
-                    <div class="mx-auto flex h-28 w-28 items-center justify-center rounded-full bg-emerald-50 text-4xl font-semibold text-emerald-600 shadow-inner">
-                        {{ $initial }}
-                    </div>
-                    <h2 class="mt-6 text-2xl font-bold text-slate-900">{{ $user->name }}</h2>
-                    <p class="text-slate-500">{{ $user->email }}</p>
-                    <div class="mt-4 inline-flex items-center gap-2 rounded-full border border-white/30 bg-emerald-500/10 px-4 py-1 text-xs font-semibold uppercase tracking-widest text-white">
-                        {{ $emailVerified ? 'Correo verificado' : 'Verificación pendiente' }}
-                    </div>
-                </div>
+      @if(session('status') === 'password-updated')
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <i class="bi bi-check-circle me-2"></i>Contraseña actualizada correctamente
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      @endif
 
-                <div class="mt-8 space-y-4 rounded-2xl bg-slate-50 p-5">
-                    <div class="flex items-center justify-between text-sm text-slate-500">
-                        <span class="font-semibold text-slate-600">Miembro desde</span>
-                        <span class="text-base font-semibold text-slate-900">{{ $memberSince ?? '---' }}</span>
-                    </div>
-                    <div class="flex items-center justify-between text-sm text-slate-500">
-                        <span class="font-semibold text-slate-600">Rol</span>
-                        <span class="text-base font-semibold text-slate-900">{{ $user->rol === 'admin' ? 'Administrador' : 'Cliente' }}</span>
-                    </div>
-                    <div class="flex items-center justify-between text-sm text-slate-500">
-                        <span class="font-semibold text-slate-600">Última actualización</span>
-                        <span class="text-base font-semibold text-slate-900">{{ optional($user->updated_at)->diffForHumans() }}</span>
-                    </div>
-                </div>
+      <div class="perfil-header">
+        <h2>Mi Perfil</h2>
+        <p>Consulta y administra tu información personal</p>
+      </div>
 
-                <div class="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
-                    <div class="rounded-2xl border border-emerald-100 bg-emerald-50/70 p-4 text-center">
-                        <p class="text-xs font-semibold uppercase tracking-wide text-emerald-600">Pedidos</p>
-                        <p class="mt-2 text-3xl font-bold text-emerald-800">{{ $pedidosCount }}</p>
-                        <p class="text-xs text-emerald-600">completados</p>
-                    </div>
-                    <div class="rounded-2xl border border-emerald-100 bg-white p-4 text-center shadow">
-                        <p class="text-xs font-semibold uppercase tracking-wide text-emerald-600">Favoritos</p>
-                        <p class="mt-2 text-3xl font-bold text-emerald-800">{{ $favoritosCount }}</p>
-                        <p class="text-xs text-emerald-600">productos guardados</p>
-                    </div>
-                    <div class="rounded-2xl border border-emerald-100 bg-white p-4 text-center shadow">
-                        <p class="text-xs font-semibold uppercase tracking-wide text-emerald-600">Carrito</p>
-                        <p class="mt-2 text-3xl font-bold text-emerald-800">{{ $cartItems }}</p>
-                        <p class="text-xs text-emerald-600">artículos</p>
-                    </div>
-                </div>
+      <div class="container my-4">
+        <div class="row justify-content-center">
+          <div class="col-md-8">
+            <div class="card p-4">
+              <div class="text-center mb-4">
+                <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+                     alt="Foto de perfil"
+                     class="rounded-circle"
+                     width="120">
+                <h4 class="mt-3">{{ $user->name }}</h4>
+                <span class="badge bg-secondary">
+                  @if($user->rol === 'admin')
+                    Administrador
+                  @elseif($user->rol === 'cajero')
+                    Cajero
+                  @else
+                    Cliente
+                  @endif
+                </span>
+              </div>
 
-                <div class="mt-8 rounded-2xl border border-dashed border-emerald-200 bg-white/80 p-4 text-sm text-slate-600">
-                    Mantén tu información al día para disfrutar de entregas rápidas y experiencias personalizadas.
-                </div>
+              <hr>
 
-                <div class="mt-6 text-center">
-                    <a href="#editar-perfil" class="inline-flex items-center justify-center rounded-2xl bg-[#11BF6E] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-200 transition hover:scale-[1.02]">
-                        Editar perfil
-                    </a>
+              <div class="mb-3">
+                <h6 class="fw-bold">Correo electrónico</h6>
+                <p>{{ $user->email }}</p>
+                @if($user->email_verified_at)
+                  <span class="badge bg-success"><i class="bi bi-check-circle"></i> Verificado</span>
+                @else
+                  <span class="badge bg-warning"><i class="bi bi-exclamation-triangle"></i> Sin verificar</span>
+                @endif
+              </div>
+
+              <div class="mb-3">
+                <h6 class="fw-bold">Miembro desde</h6>
+                <p>{{ $user->created_at->format('d/m/Y') }}</p>
+              </div>
+
+              <div class="row mb-3">
+                <div class="col-md-4">
+                  <div class="text-center p-3 bg-light rounded">
+                    <i class="bi bi-clipboard-check fs-3 text-success"></i>
+                    <p class="mb-0 mt-2"><strong>{{ $user->pedidos_count ?? 0 }}</strong></p>
+                    <small class="text-muted">Pedidos</small>
+                  </div>
                 </div>
+                <div class="col-md-4">
+                  <div class="text-center p-3 bg-light rounded">
+                    <i class="bi bi-heart fs-3 text-danger"></i>
+                    <p class="mb-0 mt-2"><strong>{{ $user->favoritos_count ?? 0 }}</strong></p>
+                    <small class="text-muted">Favoritos</small>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="text-center p-3 bg-light rounded">
+                    <i class="bi bi-cart3 fs-3 text-primary"></i>
+                    <p class="mb-0 mt-2"><strong>{{ $user->carrito?->items->sum('cantidad') ?? 0 }}</strong></p>
+                    <small class="text-muted">En Carrito</small>
+                  </div>
+                </div>
+              </div>
+
+              <div class="d-flex justify-content-end">
+                <button class="btn btn-editar px-4" data-bs-toggle="modal" data-bs-target="#modalEditar">
+                  <i class="bi bi-pencil me-2"></i>Editar perfil
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+  </div>
+
+  <div class="modal fade" id="modalEditar" tabindex="-1" aria-labelledby="modalEditarLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color: var(--color-principal); color: white;">
+          <h5 class="modal-title" id="modalEditarLabel">Editar Perfil</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          
+          <form method="POST" action="{{ route('profile.update') }}" class="mb-4">
+            @csrf
+            @method('PATCH')
+            
+            <h6 class="fw-bold mb-3">Información Personal</h6>
+            
+            <div class="mb-3">
+              <label for="name" class="form-label">Nombre</label>
+              <input type="text" id="name" name="name" class="form-control" value="{{ old('name', $user->name) }}" required>
+              @error('name')
+                <div class="text-danger mt-1">{{ $message }}</div>
+              @enderror
+            </div>
+            
+            <div class="mb-3">
+              <label for="email" class="form-label">Correo electrónico</label>
+              <input type="email" id="email" name="email" class="form-control" value="{{ old('email', $user->email) }}" required>
+              @error('email')
+                <div class="text-danger mt-1">{{ $message }}</div>
+              @enderror
             </div>
 
-            <div class="space-y-8">
-                <div id="editar-perfil" class="rounded-3xl border border-emerald-100 bg-white p-8 shadow-xl">
-                    @include('profile.partials.update-profile-information-form')
-                </div>
-
-                <div class="rounded-3xl border border-emerald-100 bg-white p-8 shadow-xl">
-                    @include('profile.partials.update-password-form')
-                </div>
-
-                <div class="rounded-3xl border border-red-100 bg-white p-8 shadow-xl">
-                    @include('profile.partials.delete-user-form')
-                </div>
+            <div class="text-end">
+              <button type="submit" class="btn btn-editar">
+                <i class="bi bi-check-circle me-2"></i>Guardar Información
+              </button>
             </div>
+          </form>
+
+          <hr>
+
+          <form method="POST" action="{{ route('password.update') }}" class="mb-4">
+            @csrf
+            @method('PUT')
+            
+            <h6 class="fw-bold mb-3">Cambiar Contraseña</h6>
+            
+            <div class="mb-3">
+              <label for="current_password" class="form-label">Contraseña Actual</label>
+              <input type="password" id="current_password" name="current_password" class="form-control">
+              @error('current_password')
+                <div class="text-danger mt-1">{{ $message }}</div>
+              @enderror
+            </div>
+            
+            <div class="mb-3">
+              <label for="password" class="form-label">Nueva Contraseña</label>
+              <input type="password" id="password" name="password" class="form-control">
+              @error('password')
+                <div class="text-danger mt-1">{{ $message }}</div>
+              @enderror
+            </div>
+            
+            <div class="mb-3">
+              <label for="password_confirmation" class="form-label">Confirmar Nueva Contraseña</label>
+              <input type="password" id="password_confirmation" name="password_confirmation" class="form-control">
+            </div>
+
+            <div class="text-end">
+              <button type="submit" class="btn btn-editar">
+                <i class="bi bi-shield-lock me-2"></i>Cambiar Contraseña
+              </button>
+            </div>
+          </form>
+
+          <hr>
+
+          <div>
+            <h6 class="fw-bold mb-3 text-danger">Zona Peligrosa</h6>
+            <p class="text-muted">Una vez eliminada tu cuenta, todos los recursos y datos serán eliminados permanentemente.</p>
+            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modalEliminar">
+              <i class="bi bi-trash me-2"></i>Eliminar Cuenta
+            </button>
+          </div>
+
         </div>
-    </section>
-</x-app-layout>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modalEliminar" tabindex="-1" aria-labelledby="modalEliminarLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-danger text-white">
+          <h5 class="modal-title" id="modalEliminarLabel">Confirmar Eliminación</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <p>¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.</p>
+          
+          <form method="POST" action="{{ route('profile.destroy') }}">
+            @csrf
+            @method('DELETE')
+            
+            <div class="mb-3">
+              <label for="password_delete" class="form-label">Confirma tu contraseña</label>
+              <input type="password" id="password_delete" name="password" class="form-control" required>
+              @error('password')
+                <div class="text-danger mt-1">{{ $message }}</div>
+              @enderror
+            </div>
+
+            <div class="text-end">
+              <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">Cancelar</button>
+              <button type="submit" class="btn btn-danger">
+                <i class="bi bi-trash me-2"></i>Eliminar Mi Cuenta
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="text-white mt-5 pt-4 pb-2" style="background-color: #1e293b;">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4">
+          <h5>NutriShop</h5>
+          <p>Tu tienda de confianza para suplementos deportivos</p>
+        </div>
+        <div class="col-md-8 text-end">
+          <p class="mb-0"> 2025 NutriShop. Todos los derechos reservados.</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

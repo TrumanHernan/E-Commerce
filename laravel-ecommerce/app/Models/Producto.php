@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Producto extends Model
 {
@@ -51,5 +52,21 @@ class Producto extends Model
     public function getTieneOfertaAttribute(): bool
     {
         return $this->precio_oferta !== null && $this->precio_oferta < $this->precio;
+    }
+
+    /**
+     * Relación: Un producto tiene muchos detalles de pedidos
+     */
+    public function pedidoDetalles(): HasMany
+    {
+        return $this->hasMany(PedidoDetalle::class);
+    }
+
+    /**
+     * Relación: Un producto tiene muchas compras
+     */
+    public function compras(): HasMany
+    {
+        return $this->hasMany(Compra::class);
     }
 }

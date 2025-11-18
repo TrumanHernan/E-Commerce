@@ -63,11 +63,19 @@ class User extends Authenticatable
     }
 
     /**
+     * Verifica si el usuario es cajero
+     */
+    public function isCajero(): bool
+    {
+        return $this->rol === 'cajero';
+    }
+
+    /**
      * Verifica si el usuario es cliente/usuario regular
      */
     public function isUser(): bool
     {
-        return $this->rol === 'user';
+        return $this->rol === 'cliente';
     }
 
     /**
@@ -100,5 +108,13 @@ class User extends Authenticatable
     public function sendPasswordResetNotification($token): void
     {
         $this->notify(new ResetPasswordNotification($token));
+    }
+
+    /**
+     * Obtiene la ruta a la que debe redirigir el usuario después del login
+     */
+    public function landingRoute(): string
+    {
+        return '/dashboard';
     }
 }

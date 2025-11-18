@@ -3,9 +3,11 @@
 @section('title', 'Dashboard Admin - NutriShop')
 
 @section('content')
+
+<!--Mensaje de Bienvenida-->
 <div class="page-header">
   <h1>Dashboard</h1>
-  <p>Bienvenido al panel de administración de NutriShop</p>
+  <p>Bienvenido, <strong>{{ Auth::user()->name }}</strong> - Rol: <em>{{ ucfirst(Auth::user()->rol) }}</em></p>
 </div>
 
 <div class="stats-grid">
@@ -17,145 +19,169 @@
       </div>
     </div>
     <div class="stat-card-value">{{ $totalProductos }}</div>
-    <div class="stat-card-label">Total de Productos</div>
+    <div class="stat-card-label">Total Productos</div>
   </div>
 
   <div class="stat-card">
     <div class="stat-card-header">
       <div class="stat-card-icon blue">
-        <i class="bi bi-receipt"></i>
+        <i class="bi bi-clipboard-data"></i>
       </div>
     </div>
-    <div class="stat-card-value">{{ $totalPedidos }}</div>
-    <div class="stat-card-label">Pedidos Realizados</div>
+    <div class="stat-card-value">L {{ number_format($valorInventario, 2) }}</div>
+    <div class="stat-card-label">Valor del Inventario</div>
   </div>
 
   <div class="stat-card">
     <div class="stat-card-header">
-      <div class="stat-card-icon purple">
+      <div class="stat-card-icon yellow">
+        <i class="bi bi-exclamation-triangle"></i>
+      </div>
+    </div>
+    <div class="stat-card-value">{{ $stockBajo }}</div>
+    <div class="stat-card-label">Productos Bajo Stock</div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-card-header">
+      <div class="stat-card-icon red">
         <i class="bi bi-people"></i>
       </div>
     </div>
-    <div class="stat-card-value">{{ $totalClientes }}</div>
-    <div class="stat-card-label">Clientes Registrados</div>
+    <div class="stat-card-value">{{ $totalProveedores }}</div>
+    <div class="stat-card-label">Proveedores Activos</div>
   </div>
 
-  <div class="stat-card">
-    <div class="stat-card-header">
-      <div class="stat-card-icon orange">
-        <i class="bi bi-grid"></i>
+</div>
+
+<div class="row">
+
+  <div class="col-md-6">
+    <div class="content-card">
+      <div class="content-card-header">
+        <h2>Productos Bajo Stock</h2>
+        <a href="{{ route('admin.productos.index') }}" class="btn-outline-green">Ver Todo</a>
       </div>
+      @if($productosStockBajo->count() > 0)
+        <div class="table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Producto</th>
+                <th>Stock</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+            <tbody>
+              @foreach($productosStockBajo as $producto)
+                <tr>
+                  <td>{{ $producto->nombre }}</td>
+                  <td>{{ $producto->stock }}</td>
+                  <td>
+                    @if($producto->stock < 5)
+                      <span class="badge-stock bajo">Crítico</span>
+                    @else
+                      <span class="badge-stock medio">Bajo</span>
+                    @endif
+                  </td>
+                </tr>
+              @endforeach
+            </tbody>
+          </table>
+        </div>
+      @else
+        <div class="empty-state">
+          <i class="bi bi-check-circle"></i>
+          <h3>Todo bien</h3>
+          <p>No hay productos con bajo stock</p>
+        </div>
+      @endif
     </div>
-    <div class="stat-card-value">{{ $totalCategorias }}</div>
-    <div class="stat-card-label">Categorías</div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="content-card">
+      <div class="content-card-header">
+        <h2>Compras Recientes</h2>
+        <a href="{{ route('admin.compras.index') }}" class="btn-outline-green">Ver Todo</a>
+      </div>
+      @if($comprasRecientes->count() > 0)
+        <div class="table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Proveedor</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              @foreach($comprasRecientes as $compra)
+                <tr>
+                  <td>{{ $compra->fecha->format('d/m/Y') }}</td>
+                  <td>{{ $compra->proveedor->nombre }}</td>
+                  <td>L {{ number_format($compra->total, 2) }}</td>
+                </tr>
+              @endforeach
+            </tbody>
+          </table>
+        </div>
+      @else
+        <div class="empty-state">
+          <i class="bi bi-inbox"></i>
+          <h3>Sin compras</h3>
+          <p>No hay compras registradas</p>
+        </div>
+      @endif
+    </div>
   </div>
 
 </div>
 
-@if($pedidosRecientes->count() > 0)
 <div class="content-card">
   <div class="content-card-header">
-    <h2>Pedidos Recientes</h2>
-    <a href="#" class="btn-green">Ver Todos</a>
+    <h2>Productos Más Vendidos</h2>
   </div>
-
-  <div class="table-container">
-    <table class="data-table">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Cliente</th>
-          <th>Fecha</th>
-          <th>Total</th>
-          <th>Estado</th>
-          <th>Método de Pago</th>
-        </tr>
-      </thead>
-      <tbody>
-        @foreach($pedidosRecientes as $pedido)
-        <tr>
-          <td>#{{ $pedido->id }}</td>
-          <td>{{ $pedido->nombre_completo }}</td>
-          <td>{{ $pedido->created_at->format('d/m/Y H:i') }}</td>
-          <td class="fw-bold text-success">L {{ number_format($pedido->total, 2) }}</td>
-          <td>
-            @if($pedido->estado == 'pendiente')
-              <span class="badge bg-warning text-dark">Pendiente</span>
-            @elseif($pedido->estado == 'procesando')
-              <span class="badge bg-info">Procesando</span>
-            @elseif($pedido->estado == 'enviado')
-              <span class="badge bg-primary">Enviado</span>
-            @elseif($pedido->estado == 'entregado')
-              <span class="badge bg-success">Entregado</span>
-            @else
-              <span class="badge bg-danger">Cancelado</span>
-            @endif
-          </td>
-          <td>{{ ucfirst(str_replace('_', ' ', $pedido->metodo_pago)) }}</td>
-        </tr>
-        @endforeach
-      </tbody>
-    </table>
-  </div>
+  @if($topProductos->count() > 0)
+    <div class="table-container">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Producto</th>
+            <th>Categoría</th>
+            <th>Precio</th>
+            <th>Stock</th>
+            <th>Ventas</th>
+          </tr>
+        </thead>
+        <tbody>
+          @foreach($topProductos as $producto)
+            <tr>
+              <td>{{ $producto->nombre }}</td>
+              <td>{{ $producto->categoria->nombre }}</td>
+              <td>L {{ number_format($producto->precio, 2) }}</td>
+              <td>
+                @if($producto->stock < 5)
+                  <span class="badge-stock bajo">{{ $producto->stock }}</span>
+                @elseif($producto->stock < 10)
+                  <span class="badge-stock medio">{{ $producto->stock }}</span>
+                @else
+                  <span class="badge-stock alto">{{ $producto->stock }}</span>
+                @endif
+              </td>
+              <td>{{ $producto->total_ventas ?? 0 }}</td>
+            </tr>
+          @endforeach
+        </tbody>
+      </table>
+    </div>
+  @else
+    <div class="empty-state">
+      <i class="bi bi-inbox"></i>
+      <h3>Sin productos</h3>
+      <p>No hay productos registrados</p>
+    </div>
+  @endif
 </div>
-@endif
-
-@if($productosStockBajo->count() > 0)
-<div class="content-card">
-  <div class="content-card-header">
-    <h2><i class="bi bi-exclamation-triangle text-warning me-2"></i>Productos con Stock Bajo</h2>
-  </div>
-
-  <div class="table-container">
-    <table class="data-table">
-      <thead>
-        <tr>
-          <th>Producto</th>
-          <th>Categoría</th>
-          <th>Precio</th>
-          <th>Stock</th>
-          <th>Estado</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        @foreach($productosStockBajo as $producto)
-        <tr>
-          <td>
-            <div class="d-flex align-items-center gap-2">
-              <img src="{{ asset('storage/productos/' . $producto->imagen) }}" alt="{{ $producto->nombre }}" style="width: 40px; height: 40px; object-fit: contain; background: #f8f9fa; border-radius: 5px; padding: 5px;">
-              <span class="fw-bold">{{ $producto->nombre }}</span>
-            </div>
-          </td>
-          <td>{{ $producto->categoria->nombre }}</td>
-          <td class="fw-bold text-success">L {{ number_format($producto->precio, 2) }}</td>
-          <td>
-            @if($producto->stock <= 5)
-              <span class="badge bg-danger">{{ $producto->stock }}</span>
-            @elseif($producto->stock <= 10)
-              <span class="badge bg-warning text-dark">{{ $producto->stock }}</span>
-            @else
-              <span class="badge bg-success">{{ $producto->stock }}</span>
-            @endif
-          </td>
-          <td>
-            @if($producto->activo)
-              <span class="badge bg-success">Activo</span>
-            @else
-              <span class="badge bg-secondary">Inactivo</span>
-            @endif
-          </td>
-          <td>
-            <a href="{{ route('admin.productos.edit', $producto) }}" class="btn btn-sm btn-outline-primary">
-              <i class="bi bi-pencil"></i> Editar
-            </a>
-          </td>
-        </tr>
-        @endforeach
-      </tbody>
-    </table>
-  </div>
-</div>
-@endif
 
 @endsection

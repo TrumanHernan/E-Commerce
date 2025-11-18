@@ -140,7 +140,6 @@
         </a>
         <form action="{{ route('carrito.vaciar') }}" method="POST">
           @csrf
-          @method('DELETE')
           <button type="submit" class="btn btn-outline-danger" onclick="return confirm('¿Vaciar todo el carrito?')">
             <i class="bi bi-trash me-2"></i>Vaciar Carrito
           </button>

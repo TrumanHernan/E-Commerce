@@ -133,4 +133,51 @@ class PedidoController extends Controller
             return back()->with('error', 'Error al procesar el pedido: ' . $e->getMessage());
         }
     }
+
+    /**
+     * Vista de administración de ventas (pedidos)
+     * Accesible para admin y cajero
+     */
+    public function adminIndex(Request $request)
+    {
+        $estado = $request->get('estado');
+        $busqueda = $request->get('busqueda');
+
+        $query = Pedido::with(['user', 'detalles.producto']);
+
+        if ($estado) {
+            $query->where('estado', $estado);
+        }
+
+        if ($busqueda) {
+            $query->where(function($q) use ($busqueda) {
+                $q->where('id', $busqueda)
+                  ->orWhere('nombre_completo', 'like', "%{$busqueda}%")
+                  ->orWhere('email', 'like', "%{$busqueda}%")
+                  ->orWhere('telefono', 'like', "%{$busqueda}%");
+            });
+        }
+
+        $pedidos = $query->latest()->paginate(15);
+
+        return view('admin.ventas.index', compact('pedidos'));
+    }
+
+    /**
+     * Actualizar el estado de un pedido
+     * Accesible para admin y cajero
+     */
+    public function updateEstado(Request $request, Pedido $pedido)
+    {
+        $validated = $request->validate([
+            'estado' => 'required|in:pendiente,procesando,enviado,entregado,cancelado',
+        ]);
+
+        $pedido->update([
+            'estado' => $validated['estado'],
+        ]);
+
+        return redirect()->route('pedidos.admin')
+            ->with('success', 'Estado del pedido actualizado correctamente');
+    }
 }

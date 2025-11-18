@@ -51,7 +51,6 @@ class ProductoController extends Controller
      */
     public function create()
     {
-        $this->authorize('isAdmin');
         $categorias = Categoria::all();
         return view('admin.productos.create', compact('categorias'));
     }
@@ -61,8 +60,6 @@ class ProductoController extends Controller
      */
     public function store(Request $request)
     {
-        $this->authorize('isAdmin');
-
         $validated = $request->validate([
             'nombre' => 'required|string|max:200',
             'descripcion' => 'nullable|string',
@@ -113,7 +110,6 @@ class ProductoController extends Controller
      */
     public function edit(Producto $producto)
     {
-        $this->authorize('isAdmin');
         $categorias = Categoria::all();
         return view('admin.productos.edit', compact('producto', 'categorias'));
     }
@@ -123,8 +119,6 @@ class ProductoController extends Controller
      */
     public function update(Request $request, Producto $producto)
     {
-        $this->authorize('isAdmin');
-
         $validated = $request->validate([
             'nombre' => 'required|string|max:200',
             'descripcion' => 'nullable|string',
@@ -165,8 +159,6 @@ class ProductoController extends Controller
      */
     public function destroy(Producto $producto)
     {
-        $this->authorize('isAdmin');
-
         // Eliminar imagen si existe
         if ($producto->imagen) {
             Storage::delete('public/productos/' . $producto->imagen);
@@ -183,8 +175,6 @@ class ProductoController extends Controller
      */
     public function adminIndex(Request $request)
     {
-        $this->authorize('isAdmin');
-
         $busqueda = $request->get('busqueda');
         $categoria_id = $request->get('categoria');
 

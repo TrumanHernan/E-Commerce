@@ -7,6 +7,7 @@ use App\Http\Controllers\CarritoController;
 use App\Http\Controllers\FavoritoController;
 use App\Http\Controllers\PedidoController;
 use App\Http\Controllers\ProveedorController;
+use App\Http\Controllers\CompraController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\Auth\SocialAuthController;
 use Illuminate\Support\Facades\Route;
@@ -26,6 +27,10 @@ Route::get('/auth/{provider}/callback', [SocialAuthController::class, 'handlePro
 Route::middleware('auth')->group(function () {
     // Dashboard
     Route::get('/dashboard', function () {
+        // Redirigir admins y cajeros al dashboard admin
+        if (Auth::user()->isAdmin() || Auth::user()->isCajero()) {
+            return redirect()->route('admin.dashboard');
+        }
         return view('dashboard');
     })->middleware('verified')->name('dashboard');
 
@@ -53,10 +58,20 @@ Route::middleware('auth')->group(function () {
     Route::post('/pedidos', [PedidoController::class, 'store'])->name('pedidos.store');
 });
 
-// Rutas de administración (requieren autenticación y rol admin)
+// Dashboard accesible para todos los usuarios autenticados
+Route::middleware('auth')->group(function () {
+    Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+});
+
+// Rutas accesibles para admin y cajero
+Route::middleware(['auth', 'cajero'])->group(function () {
+    // Ventas (pedidos) - accesible para admin y cajero
+    Route::get('/admin/ventas', [PedidoController::class, 'adminIndex'])->name('pedidos.admin');
+    Route::patch('/admin/pedidos/{pedido}/estado', [PedidoController::class, 'updateEstado'])->name('pedidos.update.estado');
+});
+
+// Rutas de administración (requieren autenticación y rol admin SOLAMENTE)
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
-    // Dashboard admin
-    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
     // Gestión de productos
     Route::get('/productos', [ProductoController::class, 'adminIndex'])->name('productos.index');
@@ -68,6 +83,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     // Gestión de proveedores
     Route::resource('proveedores', ProveedorController::class)->except(['show']);
+
+    // Gestión de compras
+    Route::resource('compras', CompraController::class)->except(['show']);
 });
 
 require __DIR__.'/auth.php';

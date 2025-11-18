@@ -39,7 +39,7 @@ class SocialAuthController extends Controller
             // Iniciar sesión
             Auth::login($user, true);
 
-            return redirect()->intended('/');
+            return redirect()->intended($user->landingRoute());
 
         } catch (\Exception $e) {
             return redirect()->route('login')->with('error', 'No se pudo iniciar sesión con ' . ucfirst($provider) . '. Por favor, intenta de nuevo.');

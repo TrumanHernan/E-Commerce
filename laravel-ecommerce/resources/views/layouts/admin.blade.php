@@ -14,48 +14,7 @@
 
   <div class="dashboard-container">
 
-    <aside class="sidebar">
-      <div class="sidebar-header">
-        <h3><span style="color: white;">Nutri</span>Shop</h3>
-        <p style="margin: 5px 0 0 0; font-size: 14px; opacity: 0.9;">Panel Admin</p>
-      </div>
-
-      <ul class="sidebar-nav">
-        <li>
-          <a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
-            <i class="bi bi-speedometer2"></i>
-            <span>Dashboard</span>
-          </a>
-        </li>
-        <li>
-          <a href="{{ route('admin.productos.index') }}" class="{{ request()->routeIs('admin.productos.*') ? 'active' : '' }}">
-            <i class="bi bi-box-seam"></i>
-            <span>Productos</span>
-          </a>
-        </li>
-        <li>
-          <a href="{{ route('admin.productos.create') }}">
-            <i class="bi bi-plus-circle"></i>
-            <span>Agregar Producto</span>
-          </a>
-        </li>
-        <li>
-          <a href="{{ route('home') }}">
-            <i class="bi bi-house-door"></i>
-            <span>Ver Sitio Web</span>
-          </a>
-        </li>
-        <li>
-          <form action="{{ route('logout') }}" method="POST">
-            @csrf
-            <button type="submit" style="background: none; border: none; color: inherit; width: 100%; text-align: left; padding: 12px 20px; cursor: pointer;">
-              <i class="bi bi-box-arrow-right"></i>
-              <span>Cerrar Sesión</span>
-            </button>
-          </form>
-        </li>
-      </ul>
-    </aside>
+    @include('components.sidebar')
 
     <main class="main-content">
 

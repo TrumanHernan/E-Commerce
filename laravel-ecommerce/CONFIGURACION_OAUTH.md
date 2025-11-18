@@ -36,7 +36,17 @@ Esto agregará los campos `provider`, `provider_id` y `avatar` a la tabla `users
 ### Paso 2: Crear credenciales OAuth 2.0
 
 1. Ve a "API y servicios" > "Credenciales"
-2. Haz clic en "Crear credenciales" > "ID de cliente de OAuth"
+2. Haz clic en "Cre<?php
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+
+User::create([
+    'name' => 'Cajero Demo',
+    'email' => 'cajero@nutrishop.com',
+    'password' => Hash::make('cajero123'),
+    'rol' => 'cajero',
+    'email_verified_at' => now(),
+]);ar credenciales" > "ID de cliente de OAuth"
 3. Configura la pantalla de consentimiento si es necesario
 4. Tipo de aplicación: **Aplicación web**
 5. Nombre: "NutriShop Login"
