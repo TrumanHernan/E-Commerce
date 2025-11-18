@@ -36,8 +36,9 @@
                 
                 <div class="d-flex gap-2">
                   @if($favorito->producto->stock > 0)
-                    <form action="{{ route('carrito.agregar', $favorito->producto) }}" method="POST" class="flex-grow-1">
+                    <form action="{{ route('carrito.agregar') }}" method="POST" class="flex-grow-1">
                       @csrf
+                      <input type="hidden" name="producto_id" value="{{ $favorito->producto->id }}">
                       <input type="hidden" name="cantidad" value="1">
                       <button type="submit" class="btn btn-success btn-sm w-100">
                         <i class="bi bi-cart-plus me-1"></i>Agregar
@@ -48,8 +49,9 @@
                       Sin stock
                     </button>
                   @endif
-                  <form action="{{ route('favoritos.toggle', $favorito->producto) }}" method="POST">
+                  <form action="{{ route('favoritos.toggle') }}" method="POST">
                     @csrf
+                    <input type="hidden" name="producto_id" value="{{ $favorito->producto->id }}">
                     <button type="submit" class="btn btn-danger btn-sm">
                       <i class="bi bi-heart-fill"></i>
                     </button>
@@ -63,7 +65,7 @@
     </div>
 
     @if($favoritos->hasPages())
-      <div class="mt-5">
+      <div class="d-flex justify-content-center mt-4">
         {{ $favoritos->links() }}
       </div>
     @endif

@@ -10,17 +10,16 @@ use Illuminate\Support\Facades\Auth;
 
 class CarritoController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
     public function index()
     {
         $carrito = $this->getOrCreateCarrito();
         $carrito->load('items.producto');
+        $subtotal = $carrito->getTotal();
+        $envio = 50.00; // Costo fijo de envío
+        $impuesto = $subtotal * 0.15; // 15% de impuesto
+        $total = $subtotal + $envio + $impuesto;
 
-        return view('carrito.index', compact('carrito'));
+        return view('carrito.index', compact('carrito', 'subtotal', 'envio', 'impuesto', 'total'));
     }
 
     public function agregar(Request $request)

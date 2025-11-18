@@ -12,11 +12,6 @@ use Illuminate\Support\Facades\DB;
 
 class PedidoController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
     public function index()
     {
         $pedidos = Auth::user()->pedidos()
@@ -48,8 +43,12 @@ class PedidoController extends Controller
         }
 
         $carrito->load('items.producto');
+        $subtotal = $carrito->getTotal();
+        $envio = 50.00; // Costo fijo de envío
+        $impuesto = $subtotal * 0.15; // 15% de impuesto
+        $total = $subtotal + $envio + $impuesto;
 
-        return view('pedidos.checkout', compact('carrito'));
+        return view('pedidos.checkout', compact('carrito', 'subtotal', 'envio', 'impuesto', 'total'));
     }
 
     public function store(Request $request)

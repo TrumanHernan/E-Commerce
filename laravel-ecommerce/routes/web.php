@@ -49,7 +49,7 @@ Route::middleware('auth')->group(function () {
     // Pedidos
     Route::get('/pedidos', [PedidoController::class, 'index'])->name('pedidos.index');
     Route::get('/pedidos/{pedido}', [PedidoController::class, 'show'])->name('pedidos.show');
-    Route::get('/checkout', [PedidoController::class, 'checkout'])->name('checkout');
+    Route::get('/checkout', [PedidoController::class, 'checkout'])->name('pedidos.checkout');
     Route::post('/pedidos', [PedidoController::class, 'store'])->name('pedidos.store');
 });
 

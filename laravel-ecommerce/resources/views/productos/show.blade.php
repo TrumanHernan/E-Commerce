@@ -88,8 +88,9 @@
         <div class="card-body">
           <div class="d-flex justify-content-between align-items-center mb-3">
             <h3 class="text-green mb-0">{{ $producto->nombre }}</h3>
-            <form action="{{ route('favoritos.toggle', $producto) }}" method="POST">
+            <form action="{{ route('favoritos.toggle') }}" method="POST">
               @csrf
+              <input type="hidden" name="producto_id" value="{{ $producto->id }}">
               <button type="submit" class="btn btn-outline-danger btn-sm">
                 <i class="bi bi-heart"></i>
               </button>
@@ -130,8 +131,9 @@
           </div>
 
           @if($producto->stock > 0)
-            <form action="{{ route('carrito.agregar', $producto) }}" method="POST">
+            <form action="{{ route('carrito.agregar') }}" method="POST">
               @csrf
+              <input type="hidden" name="producto_id" value="{{ $producto->id }}">
               <div class="cantidad-selector">
                 <button type="button" class="btn btn-outline-secondary" onclick="cambiarCantidad(-1)">
                   <i class="bi bi-dash"></i>

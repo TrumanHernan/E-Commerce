@@ -187,6 +187,7 @@
         </div>
       </div>
 
+      {{-- Sección de cupón (deshabilitada temporalmente)
       <div class="card border-0 shadow-sm mt-4">
         <div class="card-body">
           <h6 class="fw-bold mb-3">
@@ -201,6 +202,7 @@
           </form>
         </div>
       </div>
+      --}}
     </div>
     @endif
   </div>

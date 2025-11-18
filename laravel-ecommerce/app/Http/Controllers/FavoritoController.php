@@ -9,14 +9,9 @@ use Illuminate\Support\Facades\Auth;
 
 class FavoritoController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
     public function index()
     {
-        $favoritos = Auth::user()->favoritos()->with('producto')->get();
+        $favoritos = Auth::user()->favoritos()->with('producto')->paginate(12);
 
         return view('favoritos.index', compact('favoritos'));
     }
