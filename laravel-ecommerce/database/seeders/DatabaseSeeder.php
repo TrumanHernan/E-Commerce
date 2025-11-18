@@ -30,10 +30,11 @@ class DatabaseSeeder extends Seeder
             'rol' => 'user',
         ]);
 
-        // Ejecutar seeders de categorías y productos
+        // Ejecutar seeders de categorías, productos y proveedores
         $this->call([
             CategoriaSeeder::class,
             ProductoSeeder::class,
+            ProveedorSeeder::class,
         ]);
     }
 }

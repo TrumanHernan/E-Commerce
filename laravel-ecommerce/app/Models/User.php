@@ -6,6 +6,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
@@ -61,5 +63,29 @@ class User extends Authenticatable
     public function isUser(): bool
     {
         return $this->rol === 'user';
+    }
+
+    /**
+     * Relación con el carrito del usuario
+     */
+    public function carrito(): HasOne
+    {
+        return $this->hasOne(Carrito::class);
+    }
+
+    /**
+     * Relación con los pedidos del usuario
+     */
+    public function pedidos(): HasMany
+    {
+        return $this->hasMany(Pedido::class);
+    }
+
+    /**
+     * Relación con los favoritos del usuario
+     */
+    public function favoritos(): HasMany
+    {
+        return $this->hasMany(Favorito::class);
     }
 }

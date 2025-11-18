@@ -1,0 +1,33 @@
+:root {
+    --color-principal: #11BF6E;
+  }
+  
+  body {
+    background-color: #f8f9fa;
+  }
+  
+  .perfil-header {
+    background-color: var(--color-principal);
+    color: white;
+    padding: 1rem 0;
+    text-align: center;
+  }
+  
+  .card {
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
+  
+  .btn-editar {
+    background-color: var(--color-principal) !important;
+    color: white !important;
+    border: none;
+    transition: 0.3s;
+  }
+  
+  .btn-editar:hover {
+    background-color: #0ea75f !important;
+    transform: scale(1.03);
+    color: white !important;
+  }
+  
