@@ -64,6 +64,12 @@
         </a>
       </li>
       <li>
+        <a href="/adminer.php" target="_blank">
+          <i class="bi bi-database"></i>
+          <span>Base de Datos</span>
+        </a>
+      </li>
+      <li>
         <a href="{{ route('home') }}">
           <i class="bi bi-house-door"></i>
           <span>Ver Sitio Web</span>
