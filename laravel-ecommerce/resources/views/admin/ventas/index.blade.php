@@ -8,16 +8,84 @@
   <p>Administra todos los pedidos y ventas realizadas</p>
 </div>
 
+<!-- Dashboard de Métricas -->
+<div class="row mb-4">
+  <div class="col-md-3">
+    <div class="content-card text-center" style="background: linear-gradient(135deg, #11BF6E 0%, #0ea35d 100%); color: white;">
+      <div class="p-3">
+        <i class="bi bi-calendar-day" style="font-size: 2.5rem; opacity: 0.9;"></i>
+        <h2 class="mt-2 mb-0" style="font-size: 2rem; font-weight: bold;">L {{ number_format($ventasHoy, 2) }}</h2>
+        <p class="mb-0" style="opacity: 0.9; font-size: 0.95rem;">Ventas de Hoy</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="content-card text-center" style="background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%); color: white;">
+      <div class="p-3">
+        <i class="bi bi-calendar-week" style="font-size: 2.5rem; opacity: 0.9;"></i>
+        <h2 class="mt-2 mb-0" style="font-size: 2rem; font-weight: bold;">L {{ number_format($ventasSemana, 2) }}</h2>
+        <p class="mb-0" style="opacity: 0.9; font-size: 0.95rem;">Ventas de la Semana</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="content-card text-center" style="background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%); color: white;">
+      <div class="p-3">
+        <i class="bi bi-calendar-month" style="font-size: 2.5rem; opacity: 0.9;"></i>
+        <h2 class="mt-2 mb-0" style="font-size: 2rem; font-weight: bold;">L {{ number_format($ventasMes, 2) }}</h2>
+        <p class="mb-0" style="opacity: 0.9; font-size: 0.95rem;">Ventas del Mes</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="content-card text-center" style="background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); color: white;">
+      <div class="p-3">
+        <i class="bi bi-box-seam" style="font-size: 2.5rem; opacity: 0.9;"></i>
+        <h2 class="mt-2 mb-0" style="font-size: 2rem; font-weight: bold;">{{ $totalPedidos }}</h2>
+        <p class="mb-0" style="opacity: 0.9; font-size: 0.95rem;">Total de Pedidos</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Sección de Gráficas -->
+<div class="row mb-4">
+  <div class="col-md-4">
+    <div class="content-card">
+      <h6 class="mb-2" style="font-size: 0.9rem;"><i class="bi bi-graph-up"></i> Ventas por Día</h6>
+      <div style="height: 200px;">
+        <canvas id="ventasPorDiaChart"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="content-card">
+      <h6 class="mb-2" style="font-size: 0.9rem;"><i class="bi bi-pie-chart"></i> Pedidos por Estado</h6>
+      <div style="height: 200px;">
+        <canvas id="pedidosPorEstadoChart"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="content-card">
+      <h6 class="mb-2" style="font-size: 0.9rem;"><i class="bi bi-bar-chart"></i> Ventas Mensuales</h6>
+      <div style="height: 200px;">
+        <canvas id="ventasMensualesChart"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Filtros -->
 <div class="content-card mb-4">
   <form action="{{ route('pedidos.admin') }}" method="GET" class="row g-3">
-    <div class="col-md-4">
+    <div class="col-md-3">
       <label for="busqueda" class="form-label">Buscar</label>
       <input type="text" class="form-control" id="busqueda" name="busqueda" 
              value="{{ request('busqueda') }}" 
              placeholder="ID pedido, nombre, email o teléfono...">
     </div>
-    <div class="col-md-3">
+    <div class="col-md-2">
       <label for="estado" class="form-label">Estado</label>
       <select class="form-select" id="estado" name="estado">
         <option value="">Todos los estados</option>
@@ -28,17 +96,39 @@
         <option value="cancelado" {{ request('estado') == 'cancelado' ? 'selected' : '' }}>Cancelado</option>
       </select>
     </div>
-    <div class="col-md-2 d-flex align-items-end">
+    <div class="col-md-2">
+      <label for="fecha_inicio" class="form-label">Fecha Inicio</label>
+      <input type="date" class="form-control" id="fecha_inicio" name="fecha_inicio" 
+             value="{{ request('fecha_inicio') }}">
+    </div>
+    <div class="col-md-2">
+      <label for="fecha_fin" class="form-label">Fecha Fin</label>
+      <input type="date" class="form-control" id="fecha_fin" name="fecha_fin" 
+             value="{{ request('fecha_fin') }}">
+    </div>
+    <div class="col-md-1 d-flex align-items-end">
       <button type="submit" class="btn-green w-100">
-        <i class="bi bi-search"></i> Buscar
+        <i class="bi bi-search"></i>
       </button>
     </div>
-    <div class="col-md-3 d-flex align-items-end">
+    <div class="col-md-2 d-flex align-items-end">
       <a href="{{ route('pedidos.admin') }}" class="btn btn-outline-secondary w-100">
         <i class="bi bi-x-circle"></i> Limpiar
       </a>
     </div>
   </form>
+
+  <!-- Botón de Reporte PDF -->
+  @if(request()->hasAny(['fecha_inicio', 'fecha_fin', 'estado', 'busqueda']))
+    <div class="row mt-3">
+      <div class="col-12">
+        <a href="{{ route('pedidos.reporte.pdf', request()->all()) }}" 
+           class="btn btn-danger w-100" target="_blank">
+          <i class="bi bi-file-pdf me-2"></i>Descargar Reporte PDF de Resultados
+        </a>
+      </div>
+    </div>
+  @endif
 </div>
 
 <!-- Tabla de Ventas -->
@@ -113,8 +203,25 @@
                 </div>
               </td>
             </tr>
+          @endforeach
+        </tbody>
+      </table>
+    </div>
 
-            <!-- Modal Detalle Pedido -->
+    <!-- Modales -->
+    @foreach($pedidos as $pedido)
+      @php
+        $estadoClasses = [
+          'pendiente' => 'bg-warning',
+          'procesando' => 'bg-info',
+          'enviado' => 'bg-primary',
+          'entregado' => 'bg-success',
+          'cancelado' => 'bg-danger'
+        ];
+        $estadoClass = $estadoClasses[$pedido->estado] ?? 'bg-secondary';
+      @endphp
+      
+      <!-- Modal Detalle Pedido -->
             <div class="modal fade" id="modalDetalle{{ $pedido->id }}" tabindex="-1">
               <div class="modal-dialog modal-lg">
                 <div class="modal-content">
@@ -187,7 +294,7 @@
                     <h5 class="modal-title">Cambiar Estado - Pedido #{{ $pedido->id }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                   </div>
-                  <form action="{{ route('pedidos.update.estado', $pedido) }}" method="POST">
+                  <form action="{{ route('pedidos.update.estado', $pedido) }}" method="POST" id="formEstado{{ $pedido->id }}" onsubmit="mostrarCargando({{ $pedido->id }})">
                     @csrf
                     @method('PATCH')
                     <div class="modal-body">
@@ -206,19 +313,30 @@
                           <option value="cancelado" {{ $pedido->estado == 'cancelado' ? 'selected' : '' }}>Cancelado</option>
                         </select>
                       </div>
+                      <div id="alertaCargando{{ $pedido->id }}" class="alert alert-info" style="display: none;">
+                        <div class="d-flex align-items-center">
+                          <div class="spinner-border spinner-border-sm me-2" role="status">
+                            <span class="visually-hidden">Cargando...</span>
+                          </div>
+                          <span>Actualizando estado y enviando email al cliente...</span>
+                        </div>
+                      </div>
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                      <button type="submit" class="btn-green">Actualizar Estado</button>
+                      <button type="submit" class="btn-green" id="btnActualizar{{ $pedido->id }}">
+                        <span class="btn-text">Actualizar Estado</span>
+                        <span class="btn-spinner" style="display: none;">
+                          <span class="spinner-border spinner-border-sm me-1" role="status"></span>
+                          Enviando...
+                        </span>
+                      </button>
                     </div>
                   </form>
                 </div>
               </div>
             </div>
           @endforeach
-        </tbody>
-      </table>
-    </div>
 
     <!-- Paginación -->
     <div class="mt-4">
@@ -233,3 +351,208 @@
 </div>
 
 @endsection
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+// Configuración común
+const chartColors = {
+  primary: '#11BF6E',
+  blue: '#3B82F6',
+  purple: '#8B5CF6',
+  orange: '#F59E0B',
+  red: '#EF4444',
+  yellow: '#FFA500'
+};
+
+// 1. Gráfica de Ventas por Día (Línea)
+const ventasPorDiaCtx = document.getElementById('ventasPorDiaChart').getContext('2d');
+new Chart(ventasPorDiaCtx, {
+  type: 'line',
+  data: {
+    labels: @json($diasLabels),
+    datasets: [{
+      label: 'Ventas (L)',
+      data: @json($ventasPorDia),
+      borderColor: chartColors.primary,
+      backgroundColor: 'rgba(17, 191, 110, 0.1)',
+      borderWidth: 3,
+      fill: true,
+      tension: 0.4,
+      pointBackgroundColor: chartColors.primary,
+      pointBorderColor: '#fff',
+      pointBorderWidth: 2,
+      pointRadius: 5,
+      pointHoverRadius: 7
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: false
+      },
+      tooltip: {
+        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        padding: 12,
+        titleFont: { size: 14 },
+        bodyFont: { size: 13 },
+        callbacks: {
+          label: function(context) {
+            return 'Ventas: L ' + context.parsed.y.toLocaleString('es-HN', {minimumFractionDigits: 2});
+          }
+        }
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: {
+          callback: function(value) {
+            return 'L ' + value.toLocaleString('es-HN');
+          }
+        },
+        grid: {
+          color: 'rgba(0, 0, 0, 0.05)'
+        }
+      },
+      x: {
+        grid: {
+          display: false
+        }
+      }
+    }
+  }
+});
+
+// 2. Gráfica de Pedidos por Estado (Dona)
+const pedidosPorEstadoCtx = document.getElementById('pedidosPorEstadoChart').getContext('2d');
+new Chart(pedidosPorEstadoCtx, {
+  type: 'doughnut',
+  data: {
+    labels: @json($pedidosPorEstado['labels']),
+    datasets: [{
+      data: @json($pedidosPorEstado['data']),
+      backgroundColor: @json($pedidosPorEstado['colors']),
+      borderWidth: 2,
+      borderColor: '#fff'
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: true,
+    aspectRatio: 1.5,
+    animation: false,
+    plugins: {
+      legend: {
+        position: 'bottom',
+        labels: {
+          padding: 5,
+          font: { size: 9 },
+          usePointStyle: true,
+          boxWidth: 10
+        }
+      },
+      tooltip: {
+        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        padding: 8,
+        callbacks: {
+          label: function(context) {
+            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+            const percentage = ((context.parsed / total) * 100).toFixed(1);
+            return context.label + ': ' + context.parsed + ' pedidos (' + percentage + '%)';
+          }
+        }
+      }
+    }
+  }
+});
+
+// 3. Gráfica de Ventas Mensuales (Barras)
+const ventasMensualesCtx = document.getElementById('ventasMensualesChart').getContext('2d');
+new Chart(ventasMensualesCtx, {
+  type: 'bar',
+  data: {
+    labels: @json($mesesLabels),
+    datasets: [{
+      label: 'Ventas Mensuales (L)',
+      data: @json($ventasMensuales),
+      backgroundColor: [
+        'rgba(17, 191, 110, 0.8)',
+        'rgba(59, 130, 246, 0.8)',
+        'rgba(139, 92, 246, 0.8)',
+        'rgba(245, 158, 11, 0.8)',
+        'rgba(239, 68, 68, 0.8)',
+        'rgba(17, 191, 110, 0.8)'
+      ],
+      borderColor: [
+        chartColors.primary,
+        chartColors.blue,
+        chartColors.purple,
+        chartColors.orange,
+        chartColors.red,
+        chartColors.primary
+      ],
+      borderWidth: 2,
+      borderRadius: 8,
+      borderSkipped: false
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: true,
+    aspectRatio: 2,
+    animation: false,
+    plugins: {
+      legend: {
+        display: false
+      },
+      tooltip: {
+        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        padding: 8,
+        callbacks: {
+          label: function(context) {
+            return 'Ventas: L ' + context.parsed.y.toLocaleString('es-HN', {minimumFractionDigits: 2});
+          }
+        }
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: {
+          callback: function(value) {
+            return 'L ' + value.toLocaleString('es-HN');
+          }
+        },
+        grid: {
+          color: 'rgba(0, 0, 0, 0.05)'
+        }
+      },
+      x: {
+        grid: {
+          display: false
+        }
+      }
+    }
+  }
+});
+
+// Función para mostrar loading al cambiar estado
+function mostrarCargando(pedidoId) {
+  const btn = document.getElementById('btnActualizar' + pedidoId);
+  const alerta = document.getElementById('alertaCargando' + pedidoId);
+  
+  // Ocultar texto normal y mostrar spinner
+  btn.querySelector('.btn-text').style.display = 'none';
+  btn.querySelector('.btn-spinner').style.display = 'inline-block';
+  btn.disabled = true;
+  
+  // Mostrar alerta de cargando
+  alerta.style.display = 'block';
+  
+  return true; // Permitir que el form se envíe
+}
+</script>
+@endpush

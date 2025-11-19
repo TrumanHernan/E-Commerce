@@ -81,6 +81,7 @@ Route::middleware(['auth', 'cajero'])->group(function () {
     // Ventas (pedidos) - accesible para admin y cajero
     Route::get('/admin/ventas', [PedidoController::class, 'adminIndex'])->name('pedidos.admin');
     Route::patch('/admin/pedidos/{pedido}/estado', [PedidoController::class, 'updateEstado'])->name('pedidos.update.estado');
+    Route::get('/admin/ventas/reporte-pdf', [PedidoController::class, 'reportePdf'])->name('pedidos.reporte.pdf');
 });
 
 // Rutas de administración (requieren autenticación y rol admin SOLAMENTE)
