@@ -1,0 +1,70 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# Node
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Testing
+tests
+.phpunit.result.cache
+phpunit.xml
+
+# Documentation
+*.md
+CHECKLIST_IMPLEMENTACION.md
+CONFIGURACION_OAUTH.md
+CREAR_USUARIO_CAJERO.md
+DASHBOARD_ADMIN.md
+INSTRUCCIONES_INSTALACION.md
+MIGRACION_VISTAS_COMPLETADA.md
+PIXELPAY_INTEGRATION.md
+README.md
+RESUMEN.md
+RUTAS_PENDIENTES.md
+
+# Scripts
+crear_cajero.php
+crear_usuarios.sql
+test_pixelpay.php
+
+# Environment (será configurado en runtime)
+.env
+.env.backup
+.env.production
+
+# Storage (será regenerado)
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
+storage/logs/*
+!storage/framework/cache/.gitignore
+!storage/framework/sessions/.gitignore
+!storage/framework/views/.gitignore
+!storage/logs/.gitignore
+
+# Build artifacts
+public/hot
+public/storage
+public/build
+
+# MacOS
+.DS_Store
+
+# Vendor (se instalará en build)
+vendor/
