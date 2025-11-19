@@ -21,9 +21,17 @@
           <h1>Pedido #{{ str_pad($pedido->id, 6, '0', STR_PAD_LEFT) }}</h1>
           <p>Realizado el {{ $pedido->created_at->format('d/m/Y \a \l\a\s H:i') }}</p>
         </div>
-        <a href="{{ route('pedidos.index') }}" class="btn btn-outline-secondary">
-          <i class="bi bi-arrow-left me-2"></i>Volver
-        </a>
+        <div>
+          <a href="{{ route('pedidos.factura', $pedido) }}" class="btn btn-success me-2" target="_blank">
+            <i class="bi bi-receipt me-2"></i>Ver Factura
+          </a>
+          <a href="{{ route('pedidos.factura.pdf', $pedido) }}" class="btn btn-danger me-2">
+            <i class="bi bi-file-pdf me-2"></i>Descargar PDF
+          </a>
+          <a href="{{ route('pedidos.index') }}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-2"></i>Volver
+          </a>
+        </div>
       </div>
 
       <div class="row">
