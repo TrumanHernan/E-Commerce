@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Notifications\PedidoEstadoCambiado;
 
 class PedidoController extends Controller
 {
@@ -421,12 +422,27 @@ class PedidoController extends Controller
             'estado' => 'required|in:pendiente,procesando,enviado,entregado,cancelado',
         ]);
 
+        // Guardar el estado anterior
+        $estadoAnterior = $pedido->estado;
+
+        // Actualizar el estado
         $pedido->update([
             'estado' => $validated['estado'],
         ]);
 
+        // Enviar notificación por email al cliente
+        try {
+            $pedido->load('user'); // Cargar la relación del usuario
+            if ($pedido->user) {
+                $pedido->user->notify(new PedidoEstadoCambiado($pedido, $estadoAnterior));
+            }
+        } catch (\Exception $e) {
+            Log::error('Error al enviar email de cambio de estado: ' . $e->getMessage());
+            // Continuar aunque falle el email
+        }
+
         return redirect()->route('pedidos.admin')
-            ->with('success', 'Estado del pedido actualizado correctamente');
+            ->with('success', 'Estado del pedido actualizado correctamente y notificación enviada al cliente');
     }
 
     /**

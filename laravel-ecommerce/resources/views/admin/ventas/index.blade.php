@@ -294,7 +294,7 @@
                     <h5 class="modal-title">Cambiar Estado - Pedido #{{ $pedido->id }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                   </div>
-                  <form action="{{ route('pedidos.update.estado', $pedido) }}" method="POST">
+                  <form action="{{ route('pedidos.update.estado', $pedido) }}" method="POST" id="formEstado{{ $pedido->id }}" onsubmit="mostrarCargando({{ $pedido->id }})">
                     @csrf
                     @method('PATCH')
                     <div class="modal-body">
@@ -313,10 +313,24 @@
                           <option value="cancelado" {{ $pedido->estado == 'cancelado' ? 'selected' : '' }}>Cancelado</option>
                         </select>
                       </div>
+                      <div id="alertaCargando{{ $pedido->id }}" class="alert alert-info" style="display: none;">
+                        <div class="d-flex align-items-center">
+                          <div class="spinner-border spinner-border-sm me-2" role="status">
+                            <span class="visually-hidden">Cargando...</span>
+                          </div>
+                          <span>Actualizando estado y enviando email al cliente...</span>
+                        </div>
+                      </div>
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                      <button type="submit" class="btn-green">Actualizar Estado</button>
+                      <button type="submit" class="btn-green" id="btnActualizar{{ $pedido->id }}">
+                        <span class="btn-text">Actualizar Estado</span>
+                        <span class="btn-spinner" style="display: none;">
+                          <span class="spinner-border spinner-border-sm me-1" role="status"></span>
+                          Enviando...
+                        </span>
+                      </button>
                     </div>
                   </form>
                 </div>
@@ -524,5 +538,21 @@ new Chart(ventasMensualesCtx, {
     }
   }
 });
+
+// Función para mostrar loading al cambiar estado
+function mostrarCargando(pedidoId) {
+  const btn = document.getElementById('btnActualizar' + pedidoId);
+  const alerta = document.getElementById('alertaCargando' + pedidoId);
+  
+  // Ocultar texto normal y mostrar spinner
+  btn.querySelector('.btn-text').style.display = 'none';
+  btn.querySelector('.btn-spinner').style.display = 'inline-block';
+  btn.disabled = true;
+  
+  // Mostrar alerta de cargando
+  alerta.style.display = 'block';
+  
+  return true; // Permitir que el form se envíe
+}
 </script>
 @endpush
