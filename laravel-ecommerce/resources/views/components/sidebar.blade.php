@@ -34,6 +34,12 @@
         </a>
       </li>
       <li>
+        <a href="{{ route('admin.inventario.index') }}" class="{{ request()->routeIs('admin.inventario.*') ? 'active' : '' }}">
+          <i class="bi bi-clipboard-data"></i>
+          <span>Inventario</span>
+        </a>
+      </li>
+      <li>
         <a href="{{ route('admin.compras.index') }}" class="{{ request()->routeIs('admin.compras.*') ? 'active' : '' }}">
           <i class="bi bi-cart3"></i>
           <span>Compras</span>

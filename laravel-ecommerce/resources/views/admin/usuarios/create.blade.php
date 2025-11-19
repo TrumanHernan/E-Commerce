@@ -9,7 +9,7 @@
 </div>
 
 <div class="content-card">
-  <form action="{{ route('admin.usuarios.store') }}" method="POST">
+  <form action="{{ route('admin.usuarios.store') }}" method="POST" enctype="multipart/form-data">
     @csrf
 
     <div class="row">
@@ -31,6 +31,20 @@
           @error('email')
             <div class="invalid-feedback">{{ $message }}</div>
           @enderror
+        </div>
+
+        <div class="mb-3">
+          <label for="avatar" class="form-label">Avatar / Foto de Perfil</label>
+          <input type="file" class="form-control @error('avatar') is-invalid @enderror" 
+                 id="avatar" name="avatar" accept="image/*" onchange="previewAvatar(event)">
+          @error('avatar')
+            <div class="invalid-feedback">{{ $message }}</div>
+          @enderror
+          <small class="text-muted">Opcional. Formatos: JPG, PNG. Máximo 2MB</small>
+          
+          <div id="avatarPreview" class="mt-2" style="display: none;">
+            <img id="previewImg" src="" alt="Preview" class="rounded-circle" style="width: 100px; height: 100px; object-fit: cover; border: 3px solid #10b981;">
+          </div>
         </div>
 
         <div class="mb-3">
@@ -101,3 +115,19 @@
 </div>
 
 @endsection
+
+@push('scripts')
+<script>
+function previewAvatar(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('previewImg').src = e.target.result;
+            document.getElementById('avatarPreview').style.display = 'block';
+        }
+        reader.readAsDataURL(file);
+    }
+}
+</script>
+@endpush

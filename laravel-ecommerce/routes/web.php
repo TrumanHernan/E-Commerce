@@ -11,6 +11,7 @@ use App\Http\Controllers\CompraController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\Auth\SocialAuthController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\InventarioController;
 use Illuminate\Support\Facades\Route;
 
 // Ruta principal (Home)
@@ -19,6 +20,15 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 // Rutas públicas de productos
 Route::get('/productos', [ProductoController::class, 'index'])->name('productos.index');
 Route::get('/productos/{producto:slug}', [ProductoController::class, 'show'])->name('productos.show');
+
+// Vista de Ofertas (pública)
+Route::get('/ofertas', [ProductoController::class, 'ofertas'])->name('productos.ofertas');
+
+// Vistas de Categorías específicas (públicas)
+Route::get('/categoria/proteinas', [ProductoController::class, 'proteinas'])->name('productos.proteinas');
+Route::get('/categoria/creatinas', [ProductoController::class, 'creatinas'])->name('productos.creatinas');
+Route::get('/categoria/vitaminas', [ProductoController::class, 'vitaminas'])->name('productos.vitaminas');
+Route::get('/categoria/pre-entrenos', [ProductoController::class, 'preEntrenos'])->name('productos.pre-entrenos');
 
 // Rutas de autenticación social
 Route::get('/auth/{provider}/redirect', [SocialAuthController::class, 'redirectToProvider'])->name('social.redirect');
@@ -74,6 +84,11 @@ Route::middleware(['auth', 'cajero'])->group(function () {
 // Rutas de administración (requieren autenticación y rol admin SOLAMENTE)
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
 
+    // Gestión de inventario
+    Route::get('/inventario', [InventarioController::class, 'index'])->name('inventario.index');
+    Route::get('/inventario/stats', [InventarioController::class, 'getStats'])->name('inventario.stats');
+    Route::post('/inventario/{producto}/ajustar', [InventarioController::class, 'ajustarStock'])->name('inventario.ajustar');
+
     // Gestión de productos
     Route::get('/productos', [ProductoController::class, 'adminIndex'])->name('productos.index');
     Route::get('/productos/create', [ProductoController::class, 'create'])->name('productos.create');
@@ -81,6 +96,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/productos/{producto}/edit', [ProductoController::class, 'edit'])->name('productos.edit');
     Route::put('/productos/{producto}', [ProductoController::class, 'update'])->name('productos.update');
     Route::delete('/productos/{producto}', [ProductoController::class, 'destroy'])->name('productos.destroy');
+    Route::post('/productos/{producto}/oferta', [ProductoController::class, 'actualizarOferta'])->name('productos.oferta');
 
     // Gestión de proveedores
     Route::resource('proveedores', ProveedorController::class)->except(['show']);

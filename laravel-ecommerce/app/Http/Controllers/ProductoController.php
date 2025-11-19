@@ -222,8 +222,9 @@ class ProductoController extends Controller
      */
     public function adminIndex(Request $request)
     {
-        $busqueda = $request->get('busqueda');
+        $busqueda = $request->get('buscar');
         $categoria_id = $request->get('categoria');
+        $ofertas = $request->get('ofertas');
 
         $query = Producto::with('categoria');
 
@@ -238,9 +239,123 @@ class ProductoController extends Controller
             $query->where('categoria_id', $categoria_id);
         }
 
-        $productos = $query->latest()->paginate(15);
+        // Filtrar por ofertas
+        if ($ofertas === '1') {
+            // Solo productos con oferta
+            $query->whereNotNull('precio_oferta')->where('precio_oferta', '>', 0);
+        } elseif ($ofertas === '0') {
+            // Solo productos sin oferta
+            $query->where(function($q) {
+                $q->whereNull('precio_oferta')->orWhere('precio_oferta', '=', 0);
+            });
+        }
+
+        $productos = $query->latest()->paginate(15)->withQueryString();
         $categorias = Categoria::all();
 
         return view('admin.productos.index', compact('productos', 'categorias'));
+    }
+
+    /**
+     * Vista de ofertas (productos con descuento)
+     */
+    public function ofertas()
+    {
+        $productos = Producto::where('activo', true)
+            ->whereNotNull('precio_oferta')
+            ->where('precio_oferta', '>', 0)
+            ->latest()
+            ->get();
+
+        return view('productos.ofertas', compact('productos'));
+    }
+
+    /**
+     * Vista de categoría Proteínas
+     */
+    public function proteinas()
+    {
+        $productos = Producto::where('activo', true)
+            ->whereHas('categoria', function($q) {
+                $q->where('nombre', 'Proteínas');
+            })
+            ->latest()
+            ->get();
+
+        return view('productos.categorias.proteinas', compact('productos'));
+    }
+
+    /**
+     * Vista de categoría Creatinas
+     */
+    public function creatinas()
+    {
+        $productos = Producto::where('activo', true)
+            ->whereHas('categoria', function($q) {
+                $q->where('nombre', 'Creatinas');
+            })
+            ->latest()
+            ->get();
+
+        return view('productos.categorias.creatinas', compact('productos'));
+    }
+
+    /**
+     * Vista de categoría Vitaminas
+     */
+    public function vitaminas()
+    {
+        $productos = Producto::where('activo', true)
+            ->whereHas('categoria', function($q) {
+                $q->where('nombre', 'Vitaminas');
+            })
+            ->latest()
+            ->get();
+
+        return view('productos.categorias.vitaminas', compact('productos'));
+    }
+
+    /**
+     * Vista de categoría Pre-Entrenos
+     */
+    public function preEntrenos()
+    {
+        $productos = Producto::where('activo', true)
+            ->whereHas('categoria', function($q) {
+                $q->where('nombre', 'Pre-Entreno');
+            })
+            ->latest()
+            ->get();
+
+        return view('productos.categorias.pre-entrenos', compact('productos'));
+    }
+
+    /**
+     * Actualizar precio de oferta de un producto
+     */
+    public function actualizarOferta(Request $request, Producto $producto)
+    {
+        $request->validate([
+            'precio_oferta' => 'nullable|numeric|min:0',
+        ]);
+
+        // Si el precio_oferta es 0 o null, quitar la oferta
+        $precioOferta = $request->precio_oferta > 0 ? $request->precio_oferta : null;
+        
+        // Validar que el precio de oferta sea menor al precio regular
+        if ($precioOferta && $precioOferta >= $producto->precio) {
+            return response()->json([
+                'success' => false,
+                'message' => 'El precio de oferta debe ser menor al precio regular'
+            ], 422);
+        }
+
+        $producto->precio_oferta = $precioOferta;
+        $producto->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => $precioOferta ? 'Oferta aplicada correctamente' : 'Oferta eliminada correctamente'
+        ]);
     }
 }

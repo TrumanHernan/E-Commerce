@@ -72,7 +72,7 @@
         <div class="collapse navbar-collapse justify-content-center" id="navbarNutri">
           <div class="d-flex flex-wrap justify-content-center py-3">
             <a href="{{ route('home') }}" class="text-decoration-none nav-link-custom mx-4"><i class="bi bi-house-door me-1"></i> Inicio</a>
-            <a href="{{ route('productos.index', ['categoria' => 'Proteinas']) }}" class="text-decoration-none nav-link-custom mx-4"><i class="bi bi-droplet me-1"></i> Proteinas</a>
+            <a href="{{ route('productos.index', ['categoria' => 'Proteínas']) }}" class="text-decoration-none nav-link-custom mx-4"><i class="bi bi-droplet me-1"></i> Proteínas</a>
             <a href="{{ route('productos.index', ['categoria' => 'Creatinas']) }}" class="text-decoration-none nav-link-custom mx-4"><i class="bi bi-lightning me-1"></i> Creatinas</a>
             <a href="{{ route('productos.index', ['categoria' => 'Pre-Entreno']) }}" class="text-decoration-none nav-link-custom mx-4"><i class="bi bi-fire me-1"></i> Pre-Entreno</a>
             <a href="{{ route('productos.index', ['categoria' => 'Vitaminas']) }}" class="text-decoration-none nav-link-custom mx-4"><i class="bi bi-heart-pulse me-1"></i> Vitaminas</a>

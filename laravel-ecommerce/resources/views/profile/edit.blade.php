@@ -74,6 +74,8 @@
                 <p>{{ $user->created_at->format('d/m/Y') }}</p>
               </div>
 
+              @if($user->isUser())
+              {{-- Solo mostrar estadísticas para clientes --}}
               <div class="row mb-3">
                 <div class="col-md-4">
                   <div class="text-center p-3 bg-light rounded">
@@ -97,6 +99,7 @@
                   </div>
                 </div>
               </div>
+              @endif
 
               <div class="d-flex justify-content-end">
                 <button class="btn btn-editar px-4" data-bs-toggle="modal" data-bs-target="#modalEditar">

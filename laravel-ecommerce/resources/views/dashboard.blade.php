@@ -29,6 +29,8 @@
         <p>Bienvenido, <strong>{{ Auth::user()->name }}</strong></p>
       </div>
 
+      @if(Auth::user()->isUser())
+      {{-- Solo mostrar estas estadísticas para clientes --}}
       <div class="stats-grid">
 
         <div class="stat-card">
@@ -72,6 +74,7 @@
         </div>
 
       </div>
+      @endif
 
       <div class="content-card text-center py-5">
         <h3>Bienvenido a NutriShop</h3>
