@@ -56,15 +56,33 @@ if wait_for_db; then
     echo "Running migrations..."
     php artisan migrate --force --no-interaction || echo "WARNING: Migrations failed"
 
-    # Ejecutar seeders solo si la base de datos está vacía
-    echo "Checking if database needs seeding..."
-    PRODUCT_COUNT=$(php artisan tinker --execute="echo App\Models\Producto::count();" 2>/dev/null || echo "0")
+    # Ejecutar seeders
+    # Usar variable de entorno SKIP_SEEDERS=true para omitir seeders en despliegues futuros
+    if [ "$SKIP_SEEDERS" != "true" ]; then
+        echo "Checking if database needs seeding..."
+        # Intentar contar productos usando SQL directo
+        PRODUCT_COUNT=$(php artisan db:show --database=pgsql --json 2>/dev/null | grep -o '"tables":' || echo "")
 
-    if [ "$PRODUCT_COUNT" = "0" ] || [ "$RUN_SEEDERS" = "true" ]; then
-        echo "Seeding database with initial data..."
-        php artisan db:seed --force || echo "WARNING: Seeding failed"
+        # Si la tabla productos existe, verificar si está vacía
+        TABLE_EXISTS=$(php -r "
+            try {
+                \$pdo = new PDO('pgsql:host=' . getenv('DB_HOST') . ';port=' . getenv('DB_PORT') . ';dbname=' . getenv('DB_DATABASE'), getenv('DB_USERNAME'), getenv('DB_PASSWORD'));
+                \$result = \$pdo->query('SELECT COUNT(*) as count FROM productos');
+                echo \$result->fetch()['count'];
+            } catch (Exception \$e) {
+                echo '0';
+            }
+        " 2>/dev/null || echo "0")
+
+        if [ "$TABLE_EXISTS" = "0" ] || [ "$RUN_SEEDERS" = "true" ]; then
+            echo "Database is empty or RUN_SEEDERS=true. Running seeders..."
+            php artisan db:seed --force && echo "✓ Seeders completed successfully!" || echo "WARNING: Seeding failed"
+        else
+            echo "Database already has $TABLE_EXISTS products, skipping seeders"
+            echo "Set SKIP_SEEDERS=false or RUN_SEEDERS=true to force seeding"
+        fi
     else
-        echo "Database already has data, skipping seeders"
+        echo "SKIP_SEEDERS=true, skipping database seeding"
     fi
 else
     echo "WARNING: Skipping database operations due to connection issues"
