@@ -56,8 +56,8 @@ RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist
 # Copiar archivos de package.json
 COPY package*.json ./
 
-# Instalar dependencias de Node.js
-RUN npm ci --only=production
+# Instalar dependencias de Node.js (incluyendo devDependencies para el build)
+RUN npm ci
 
 # Copiar el resto del código
 COPY . .
@@ -67,6 +67,9 @@ RUN composer dump-autoload --optimize --no-dev
 
 # Compilar assets con Vite
 RUN npm run build
+
+# Limpiar node_modules para reducir tamaño de imagen (no hay dependencias de producción)
+RUN rm -rf node_modules
 
 # Crear directorios necesarios y establecer permisos
 RUN mkdir -p \
