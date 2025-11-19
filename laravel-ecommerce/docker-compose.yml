@@ -15,12 +15,31 @@ services:
       - APP_URL=${APP_URL:-http://localhost:8080}
       - LOG_CHANNEL=${LOG_CHANNEL:-stack}
       - LOG_LEVEL=${LOG_LEVEL:-info}
-      - DB_CONNECTION=${DB_CONNECTION:-sqlite}
+      - DB_CONNECTION=${DB_CONNECTION:-pgsql}
+      - DB_HOST=${DB_HOST:-127.0.0.1}
+      - DB_PORT=${DB_PORT:-5432}
+      - DB_DATABASE=${DB_DATABASE:-postgres}
+      - DB_USERNAME=${DB_USERNAME:-postgres}
+      - DB_PASSWORD=${DB_PASSWORD}
       - SESSION_DRIVER=${SESSION_DRIVER:-database}
       - QUEUE_CONNECTION=${QUEUE_CONNECTION:-database}
       - CACHE_STORE=${CACHE_STORE:-database}
       - FILESYSTEM_DISK=${FILESYSTEM_DISK:-local}
-      - MAIL_MAILER=${MAIL_MAILER:-log}
+      - MAIL_MAILER=${MAIL_MAILER:-smtp}
+      - MAIL_HOST=${MAIL_HOST:-smtp.gmail.com}
+      - MAIL_PORT=${MAIL_PORT:-587}
+      - MAIL_USERNAME=${MAIL_USERNAME}
+      - MAIL_PASSWORD=${MAIL_PASSWORD}
+      - MAIL_ENCRYPTION=${MAIL_ENCRYPTION:-tls}
+      - MAIL_FROM_ADDRESS=${MAIL_FROM_ADDRESS}
+      - MAIL_FROM_NAME=${MAIL_FROM_NAME:-NutriShop}
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      - GOOGLE_REDIRECT_URI=${GOOGLE_REDIRECT_URI}
+      - PIXELPAY_ENV=${PIXELPAY_ENV:-sandbox}
+      - PIXELPAY_KEY=${PIXELPAY_KEY}
+      - PIXELPAY_SECRET=${PIXELPAY_SECRET}
+      - PIXELPAY_ENDPOINT=${PIXELPAY_ENDPOINT}
     volumes:
       # Solo para desarrollo - comentar en producción
       # - ./storage:/var/www/html/storage
