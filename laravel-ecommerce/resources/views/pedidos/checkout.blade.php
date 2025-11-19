@@ -149,6 +149,33 @@
                 <div class="text-danger mt-2">{{ $message }}</div>
               @enderror
 
+              <div id="informacion-tarjeta" style="display: none; margin-top: 20px;">
+                <div class="card bg-light border-0 p-3">
+                  <h6 class="mb-3 text-green"><i class="bi bi-credit-card-2-front me-2"></i>Datos de la Tarjeta</h6>
+                  <div class="row">
+                    <div class="col-12 mb-3">
+                      <label for="card_number" class="form-label">Número de Tarjeta</label>
+                      <input type="text" class="form-control" id="card_number" name="card_number" placeholder="0000 0000 0000 0000" maxlength="19">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="card_holder" class="form-label">Nombre en la Tarjeta</label>
+                      <input type="text" class="form-control" id="card_holder" name="card_holder" placeholder="Como aparece en la tarjeta">
+                    </div>
+                    <div class="col-md-3 mb-3">
+                      <label for="card_expiry" class="form-label">Expiración</label>
+                      <input type="text" class="form-control" id="card_expiry" name="card_expiry" placeholder="MM/YY" maxlength="5">
+                    </div>
+                    <div class="col-md-3 mb-3">
+                      <label for="card_cvv" class="form-label">CVV</label>
+                      <input type="text" class="form-control" id="card_cvv" name="card_cvv" placeholder="123" maxlength="4">
+                    </div>
+                  </div>
+                  <div class="alert alert-warning py-2 mb-0">
+                    <small><i class="bi bi-lock-fill me-1"></i>Transacción segura encriptada. No guardamos los datos de tu tarjeta.</small>
+                  </div>
+                </div>
+              </div>
+
               <div id="informacion-efectivo" style="display: none; margin-top: 20px;">
                 <div class="alert alert-info bg-light-green border-green border-1" role="alert">
                   <i class="bi bi-info-circle me-2 text-green"></i>
@@ -247,17 +274,76 @@
 
 @push('scripts')
 <script>
-document.querySelectorAll('input[name="metodo_pago"]').forEach(radio => {
-  radio.addEventListener('change', function() {
-    document.getElementById('informacion-efectivo').style.display = 'none';
-    document.getElementById('informacion-transferencia').style.display = 'none';
-    
-    if (this.value === 'efectivo') {
-      document.getElementById('informacion-efectivo').style.display = 'block';
-    } else if (this.value === 'transferencia') {
-      document.getElementById('informacion-transferencia').style.display = 'block';
-    }
-  });
+document.addEventListener('DOMContentLoaded', function() {
+    // Manejo de cambio de método de pago
+    document.querySelectorAll('input[name="metodo_pago"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            document.getElementById('informacion-efectivo').style.display = 'none';
+            document.getElementById('informacion-transferencia').style.display = 'none';
+            document.getElementById('informacion-tarjeta').style.display = 'none';
+
+            // Remover required de campos de tarjeta
+            document.getElementById('card_number').required = false;
+            document.getElementById('card_holder').required = false;
+            document.getElementById('card_expiry').required = false;
+            document.getElementById('card_cvv').required = false;
+
+            if (this.value === 'efectivo') {
+                document.getElementById('informacion-efectivo').style.display = 'block';
+            } else if (this.value === 'transferencia') {
+                document.getElementById('informacion-transferencia').style.display = 'block';
+            } else if (this.value === 'tarjeta_credito') {
+                document.getElementById('informacion-tarjeta').style.display = 'block';
+
+                // Agregar required a campos de tarjeta
+                document.getElementById('card_number').required = true;
+                document.getElementById('card_holder').required = true;
+                document.getElementById('card_expiry').required = true;
+                document.getElementById('card_cvv').required = true;
+            }
+        });
+    });
+
+    // Formateo de número de tarjeta (espacios cada 4 dígitos)
+    document.getElementById('card_number').addEventListener('input', function (e) {
+        let value = e.target.value.replace(/\s/g, ''); // Remover espacios
+        let formattedValue = value.match(/.{1,4}/g); // Separar en grupos de 4
+        e.target.value = formattedValue ? formattedValue.join(' ') : value;
+    });
+
+    // Formateo de fecha de expiración (MM/YY)
+    document.getElementById('card_expiry').addEventListener('input', function (e) {
+        let value = e.target.value.replace(/\D/g, ''); // Solo números
+
+        if (value.length >= 2) {
+            value = value.substring(0, 2) + '/' + value.substring(2, 4);
+        }
+
+        e.target.value = value;
+    });
+
+    // Solo números en CVV
+    document.getElementById('card_cvv').addEventListener('input', function (e) {
+        e.target.value = e.target.value.replace(/\D/g, '');
+    });
+
+    // Validación antes de enviar el formulario
+    document.getElementById('formularioCheckout').addEventListener('submit', function(e) {
+        const metodoPago = document.querySelector('input[name="metodo_pago"]:checked');
+
+        if (!metodoPago) {
+            e.preventDefault();
+            alert('Por favor seleccione un método de pago');
+            return false;
+        }
+
+        // Si es tarjeta de crédito, mostrar indicador de procesamiento
+        if (metodoPago.value === 'tarjeta_credito') {
+            const btnSubmit = document.querySelector('button[form="formularioCheckout"][type="submit"]');
+            btnSubmit.disabled = true;
+            btnSubmit.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Procesando Pago...';
+        }
+    });
 });
 </script>
 @endpush

@@ -47,4 +47,12 @@ return [
         'redirect' => env('FACEBOOK_REDIRECT_URI'),
     ],
 
+    'pixelpay' => [
+        'key' => env('PIXELPAY_KEY'),
+        'secret' => env('PIXELPAY_SECRET'),
+        'domain' => env('PIXELPAY_DOMAIN'),
+        'endpoint' => env('PIXELPAY_ENDPOINT'),
+        'env' => env('PIXELPAY_ENV', 'sandbox'),
+    ],
+
 ];
