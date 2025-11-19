@@ -10,6 +10,7 @@ use App\Http\Controllers\ProveedorController;
 use App\Http\Controllers\CompraController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\Auth\SocialAuthController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 // Ruta principal (Home)
@@ -88,6 +89,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     // Gestión de compras
     Route::resource('compras', CompraController::class)->except(['show']);
+
+    // Gestión de usuarios
+    Route::resource('usuarios', UserController::class)->except(['show']);
 });
 
 require __DIR__.'/auth.php';

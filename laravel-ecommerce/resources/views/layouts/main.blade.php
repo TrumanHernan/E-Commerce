@@ -153,6 +153,22 @@
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <script>
+    // Script para limpiar búsqueda automáticamente
+    document.addEventListener('DOMContentLoaded', function() {
+      const inputBuscar = document.getElementById('buscarProductos');
+      if (inputBuscar) {
+        inputBuscar.addEventListener('input', function() {
+          // Si el campo está vacío y había una búsqueda activa, redirigir a productos sin filtro
+          if (this.value.trim() === '' && window.location.search.includes('buscar=')) {
+            window.location.href = '{{ route("productos.index") }}';
+          }
+        });
+      }
+    });
+  </script>
+  
   @stack('scripts')
 
 </body>

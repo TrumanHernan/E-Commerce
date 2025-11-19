@@ -17,30 +17,77 @@ class ProductoController extends Controller
     {
         $categoriaParam = $request->get('categoria');
         $busqueda = $request->get('busqueda');
+        $buscar = $request->get('buscar'); // Desde el header
+        $precioMin = $request->get('precio_min');
+        $precioMax = $request->get('precio_max');
+        $ofertas = $request->get('ofertas');
+        $disponible = $request->get('disponible');
+        $orden = $request->get('orden', 'recientes');
 
         $query = Producto::with('categoria')->where('activo', true);
 
+        // Búsqueda por texto (desde header o filtro)
+        if ($buscar || $busqueda) {
+            $textoBusqueda = $buscar ?? $busqueda;
+            $query->where(function($q) use ($textoBusqueda) {
+                $q->where('nombre', 'like', "%{$textoBusqueda}%")
+                  ->orWhere('descripcion', 'like', "%{$textoBusqueda}%");
+            });
+        }
+
         // Filtrar por categoría (acepta ID o nombre)
         if ($categoriaParam) {
-            // Si es numérico, buscar por ID
             if (is_numeric($categoriaParam)) {
                 $query->where('categoria_id', $categoriaParam);
             } else {
-                // Si es texto, buscar por nombre de categoría
                 $query->whereHas('categoria', function($q) use ($categoriaParam) {
                     $q->where('nombre', 'like', $categoriaParam);
                 });
             }
         }
 
-        if ($busqueda) {
-            $query->where(function($q) use ($busqueda) {
-                $q->where('nombre', 'like', "%{$busqueda}%")
-                  ->orWhere('descripcion', 'like', "%{$busqueda}%");
+        // Filtrar por rango de precio
+        if ($precioMin) {
+            $query->where(function($q) use ($precioMin) {
+                $q->where('precio', '>=', $precioMin)
+                  ->orWhere('precio_oferta', '>=', $precioMin);
             });
         }
 
-        $productos = $query->latest()->paginate(12);
+        if ($precioMax) {
+            $query->where(function($q) use ($precioMax) {
+                $q->where('precio', '<=', $precioMax)
+                  ->orWhere('precio_oferta', '<=', $precioMax);
+            });
+        }
+
+        // Filtrar solo ofertas
+        if ($ofertas) {
+            $query->whereNotNull('precio_oferta');
+        }
+
+        // Filtrar solo disponibles
+        if ($disponible) {
+            $query->where('stock', '>', 0);
+        }
+
+        // Ordenamiento
+        switch ($orden) {
+            case 'precio_asc':
+                $query->orderByRaw('COALESCE(precio_oferta, precio) ASC');
+                break;
+            case 'precio_desc':
+                $query->orderByRaw('COALESCE(precio_oferta, precio) DESC');
+                break;
+            case 'nombre':
+                $query->orderBy('nombre', 'ASC');
+                break;
+            default: // recientes
+                $query->latest();
+                break;
+        }
+
+        $productos = $query->paginate(12);
         $categorias = Categoria::all();
 
         return view('productos.index', compact('productos', 'categorias'));
