@@ -349,13 +349,65 @@ class PedidoController extends Controller
         
         $pedidosPendientes = Pedido::where('estado', 'pendiente')->count();
 
+        // Datos para gráficas de Chart.js
+        
+        // Ventas por día (últimos 7 días)
+        $ventasPorDia = [];
+        $diasLabels = [];
+        for ($i = 6; $i >= 0; $i--) {
+            $fecha = now()->subDays($i);
+            $diasLabels[] = $fecha->locale('es')->isoFormat('ddd');
+            $ventasPorDia[] = Pedido::whereDate('created_at', $fecha)
+                ->whereIn('estado', ['procesando', 'enviado', 'entregado'])
+                ->sum('total');
+        }
+
+        // Pedidos por estado
+        $pedidosPorEstado = [
+            'labels' => [],
+            'data' => [],
+            'colors' => []
+        ];
+        $estados = [
+            'pendiente' => ['label' => 'Pendiente', 'color' => '#FFA500'],
+            'procesando' => ['label' => 'Procesando', 'color' => '#3B82F6'],
+            'enviado' => ['label' => 'Enviado', 'color' => '#8B5CF6'],
+            'entregado' => ['label' => 'Entregado', 'color' => '#11BF6E'],
+            'cancelado' => ['label' => 'Cancelado', 'color' => '#EF4444']
+        ];
+        foreach ($estados as $estado => $info) {
+            $count = Pedido::where('estado', $estado)->count();
+            if ($count > 0) {
+                $pedidosPorEstado['labels'][] = $info['label'];
+                $pedidosPorEstado['data'][] = $count;
+                $pedidosPorEstado['colors'][] = $info['color'];
+            }
+        }
+
+        // Ventas mensuales (últimos 6 meses)
+        $ventasMensuales = [];
+        $mesesLabels = [];
+        for ($i = 5; $i >= 0; $i--) {
+            $mes = now()->subMonths($i);
+            $mesesLabels[] = $mes->locale('es')->isoFormat('MMM');
+            $ventasMensuales[] = Pedido::whereMonth('created_at', $mes->month)
+                ->whereYear('created_at', $mes->year)
+                ->whereIn('estado', ['procesando', 'enviado', 'entregado'])
+                ->sum('total');
+        }
+
         return view('admin.ventas.index', compact(
             'pedidos',
             'ventasHoy',
             'ventasSemana',
             'ventasMes',
             'totalPedidos',
-            'pedidosPendientes'
+            'pedidosPendientes',
+            'ventasPorDia',
+            'diasLabels',
+            'pedidosPorEstado',
+            'ventasMensuales',
+            'mesesLabels'
         ));
     }
 

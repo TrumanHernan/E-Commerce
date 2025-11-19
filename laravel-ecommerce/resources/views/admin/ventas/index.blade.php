@@ -48,6 +48,34 @@
   </div>
 </div>
 
+<!-- Sección de Gráficas -->
+<div class="row mb-4">
+  <div class="col-md-4">
+    <div class="content-card">
+      <h6 class="mb-2" style="font-size: 0.9rem;"><i class="bi bi-graph-up"></i> Ventas por Día</h6>
+      <div style="height: 200px;">
+        <canvas id="ventasPorDiaChart"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="content-card">
+      <h6 class="mb-2" style="font-size: 0.9rem;"><i class="bi bi-pie-chart"></i> Pedidos por Estado</h6>
+      <div style="height: 200px;">
+        <canvas id="pedidosPorEstadoChart"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="content-card">
+      <h6 class="mb-2" style="font-size: 0.9rem;"><i class="bi bi-bar-chart"></i> Ventas Mensuales</h6>
+      <div style="height: 200px;">
+        <canvas id="ventasMensualesChart"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Filtros -->
 <div class="content-card mb-4">
   <form action="{{ route('pedidos.admin') }}" method="GET" class="row g-3">
@@ -309,3 +337,192 @@
 </div>
 
 @endsection
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+// Configuración común
+const chartColors = {
+  primary: '#11BF6E',
+  blue: '#3B82F6',
+  purple: '#8B5CF6',
+  orange: '#F59E0B',
+  red: '#EF4444',
+  yellow: '#FFA500'
+};
+
+// 1. Gráfica de Ventas por Día (Línea)
+const ventasPorDiaCtx = document.getElementById('ventasPorDiaChart').getContext('2d');
+new Chart(ventasPorDiaCtx, {
+  type: 'line',
+  data: {
+    labels: @json($diasLabels),
+    datasets: [{
+      label: 'Ventas (L)',
+      data: @json($ventasPorDia),
+      borderColor: chartColors.primary,
+      backgroundColor: 'rgba(17, 191, 110, 0.1)',
+      borderWidth: 3,
+      fill: true,
+      tension: 0.4,
+      pointBackgroundColor: chartColors.primary,
+      pointBorderColor: '#fff',
+      pointBorderWidth: 2,
+      pointRadius: 5,
+      pointHoverRadius: 7
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: false
+      },
+      tooltip: {
+        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        padding: 12,
+        titleFont: { size: 14 },
+        bodyFont: { size: 13 },
+        callbacks: {
+          label: function(context) {
+            return 'Ventas: L ' + context.parsed.y.toLocaleString('es-HN', {minimumFractionDigits: 2});
+          }
+        }
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: {
+          callback: function(value) {
+            return 'L ' + value.toLocaleString('es-HN');
+          }
+        },
+        grid: {
+          color: 'rgba(0, 0, 0, 0.05)'
+        }
+      },
+      x: {
+        grid: {
+          display: false
+        }
+      }
+    }
+  }
+});
+
+// 2. Gráfica de Pedidos por Estado (Dona)
+const pedidosPorEstadoCtx = document.getElementById('pedidosPorEstadoChart').getContext('2d');
+new Chart(pedidosPorEstadoCtx, {
+  type: 'doughnut',
+  data: {
+    labels: @json($pedidosPorEstado['labels']),
+    datasets: [{
+      data: @json($pedidosPorEstado['data']),
+      backgroundColor: @json($pedidosPorEstado['colors']),
+      borderWidth: 2,
+      borderColor: '#fff'
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: true,
+    aspectRatio: 1.5,
+    animation: false,
+    plugins: {
+      legend: {
+        position: 'bottom',
+        labels: {
+          padding: 5,
+          font: { size: 9 },
+          usePointStyle: true,
+          boxWidth: 10
+        }
+      },
+      tooltip: {
+        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        padding: 8,
+        callbacks: {
+          label: function(context) {
+            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+            const percentage = ((context.parsed / total) * 100).toFixed(1);
+            return context.label + ': ' + context.parsed + ' pedidos (' + percentage + '%)';
+          }
+        }
+      }
+    }
+  }
+});
+
+// 3. Gráfica de Ventas Mensuales (Barras)
+const ventasMensualesCtx = document.getElementById('ventasMensualesChart').getContext('2d');
+new Chart(ventasMensualesCtx, {
+  type: 'bar',
+  data: {
+    labels: @json($mesesLabels),
+    datasets: [{
+      label: 'Ventas Mensuales (L)',
+      data: @json($ventasMensuales),
+      backgroundColor: [
+        'rgba(17, 191, 110, 0.8)',
+        'rgba(59, 130, 246, 0.8)',
+        'rgba(139, 92, 246, 0.8)',
+        'rgba(245, 158, 11, 0.8)',
+        'rgba(239, 68, 68, 0.8)',
+        'rgba(17, 191, 110, 0.8)'
+      ],
+      borderColor: [
+        chartColors.primary,
+        chartColors.blue,
+        chartColors.purple,
+        chartColors.orange,
+        chartColors.red,
+        chartColors.primary
+      ],
+      borderWidth: 2,
+      borderRadius: 8,
+      borderSkipped: false
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: true,
+    aspectRatio: 2,
+    animation: false,
+    plugins: {
+      legend: {
+        display: false
+      },
+      tooltip: {
+        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        padding: 8,
+        callbacks: {
+          label: function(context) {
+            return 'Ventas: L ' + context.parsed.y.toLocaleString('es-HN', {minimumFractionDigits: 2});
+          }
+        }
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: {
+          callback: function(value) {
+            return 'L ' + value.toLocaleString('es-HN');
+          }
+        },
+        grid: {
+          color: 'rgba(0, 0, 0, 0.05)'
+        }
+      },
+      x: {
+        grid: {
+          display: false
+        }
+      }
+    }
+  }
+});
+</script>
+@endpush
