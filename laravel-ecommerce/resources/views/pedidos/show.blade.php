@@ -22,13 +22,13 @@
           <p>Realizado el {{ $pedido->created_at->format('d/m/Y \a \l\a\s H:i') }}</p>
         </div>
         <div>
-          <a href="{{ route('pedidos.factura', $pedido) }}" class="btn btn-success me-2" target="_blank">
-            <i class="bi bi-receipt me-2"></i>Ver Factura
+          <a href="{{ route('pedidos.factura', $pedido) }}" class="btn btn-success btn-lg shadow-sm me-2" target="_blank">
+            <i class="bi bi-receipt-cutoff me-2"></i>Ver Factura
           </a>
-          <a href="{{ route('pedidos.factura.pdf', $pedido) }}" class="btn btn-danger me-2">
-            <i class="bi bi-file-pdf me-2"></i>Descargar PDF
+          <a href="{{ route('pedidos.factura.pdf', $pedido) }}" class="btn btn-danger btn-lg shadow-sm me-2">
+            <i class="bi bi-file-earmark-pdf-fill me-2"></i>Descargar PDF
           </a>
-          <a href="{{ route('pedidos.index') }}" class="btn btn-outline-secondary">
+          <a href="{{ route('pedidos.index') }}" class="btn btn-outline-secondary btn-lg">
             <i class="bi bi-arrow-left me-2"></i>Volver
           </a>
         </div>

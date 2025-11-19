@@ -126,6 +126,7 @@
                   <label for="tarjeta_credito" class="card p-3 text-center border-2 h-100">
                     <i class="bi bi-credit-card fs-1 text-green mb-2"></i>
                     <div class="fw-bold">Tarjeta de Crédito</div>
+                    <small class="text-muted">Pago seguro en línea</small>
                   </label>
                 </div>
 
@@ -133,7 +134,8 @@
                   <input type="radio" id="efectivo" name="metodo_pago" value="efectivo">
                   <label for="efectivo" class="card p-3 text-center border-2 h-100">
                     <i class="bi bi-cash-coin fs-1 text-green mb-2"></i>
-                    <div class="fw-bold">Efectivo</div>
+                    <div class="fw-bold">Efectivo Contra Entrega</div>
+                    <small class="text-muted">Paga al recibir tu pedido</small>
                   </label>
                 </div>
 
@@ -142,6 +144,7 @@
                   <label for="transferencia" class="card p-3 text-center border-2 h-100">
                     <i class="bi bi-bank fs-1 text-green mb-2"></i>
                     <div class="fw-bold">Transferencia Bancaria</div>
+                    <small class="text-muted">Recibirás instrucciones por email</small>
                   </label>
                 </div>
               </div>

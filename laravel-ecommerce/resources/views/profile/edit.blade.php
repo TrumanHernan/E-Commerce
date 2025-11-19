@@ -41,10 +41,19 @@
           <div class="col-md-8">
             <div class="card p-4">
               <div class="text-center mb-4">
-                <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
-                     alt="Foto de perfil"
-                     class="rounded-circle"
-                     width="120">
+                @if($user->avatar)
+                  <img src="{{ asset('storage/' . $user->avatar) }}"
+                       alt="Foto de perfil"
+                       class="rounded-circle"
+                       width="120"
+                       height="120"
+                       style="object-fit: cover; border: 3px solid #11BF6E;">
+                @else
+                  <div class="rounded-circle d-inline-flex align-items-center justify-content-center" 
+                       style="width: 120px; height: 120px; background-color: #11BF6E; color: white; font-size: 48px; font-weight: bold; border: 3px solid #0fa359;">
+                    {{ strtoupper(substr($user->name, 0, 1)) }}
+                  </div>
+                @endif
                 <h4 class="mt-3">{{ $user->name }}</h4>
                 <span class="badge bg-secondary">
                   @if($user->rol === 'admin')

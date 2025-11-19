@@ -39,50 +39,6 @@
 
   </div>
 
-  <footer class="text-white mt-5 pt-4 pb-2">
-    <div class="container">
-      <div class="row">
-
-        <div class="col-md-4">
-          <h5>NutriShop</h5>
-          <p>Tu tienda de confianza para suplementos <br> deportivos y nutricionales de la más alta calidad.</p>
-        </div>
-
-        <div class="col-md-3 offset-md-1">
-          <h5>Enlaces Rápidos</h5>
-          <ul class="list-unstyled">
-            <li><a href="#" class="text-white text-decoration-none">Sobre Nosotros</a></li>
-            <li><a href="#" class="text-white text-decoration-none">Contacto</a></li>
-          </ul>
-        </div>
-
-        <div class="col-md-3 offset-md-1">
-          <h5>Categorías</h5>
-          <ul class="list-unstyled">
-            <li><a href="#" class="text-white text-decoration-none">Proteínas</a></li>
-            <li><a href="#" class="text-white text-decoration-none">Quemadores</a></li>
-            <li><a href="#" class="text-white text-decoration-none">Pre-Entreno</a></li>
-            <li><a href="#" class="text-white text-decoration-none">Vitaminas</a></li>
-          </ul>
-        </div>
-      </div>
-
-      <hr class="bg-white">
-
-      <div class="container">
-        <div class="row text-center text-md-start gy-2">
-          <div class="col-12 col-md-6">
-            <p class="mb-0">2025 NutriShop. Todos los derechos reservados.</p>
-          </div>
-          <div class="col-12 col-md-6 text-md-end">
-            <p class="mb-0">Desarrolladores: Truman Castañeda, Alberto Colindres, Christopher Martínez</p>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </footer>
-
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   @stack('scripts')
 

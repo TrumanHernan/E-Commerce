@@ -8,16 +8,56 @@
   <p>Administra todos los pedidos y ventas realizadas</p>
 </div>
 
+<!-- Dashboard de Métricas -->
+<div class="row mb-4">
+  <div class="col-md-3">
+    <div class="content-card text-center" style="background: linear-gradient(135deg, #11BF6E 0%, #0ea35d 100%); color: white;">
+      <div class="p-3">
+        <i class="bi bi-calendar-day" style="font-size: 2.5rem; opacity: 0.9;"></i>
+        <h2 class="mt-2 mb-0" style="font-size: 2rem; font-weight: bold;">L {{ number_format($ventasHoy, 2) }}</h2>
+        <p class="mb-0" style="opacity: 0.9; font-size: 0.95rem;">Ventas de Hoy</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="content-card text-center" style="background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%); color: white;">
+      <div class="p-3">
+        <i class="bi bi-calendar-week" style="font-size: 2.5rem; opacity: 0.9;"></i>
+        <h2 class="mt-2 mb-0" style="font-size: 2rem; font-weight: bold;">L {{ number_format($ventasSemana, 2) }}</h2>
+        <p class="mb-0" style="opacity: 0.9; font-size: 0.95rem;">Ventas de la Semana</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="content-card text-center" style="background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%); color: white;">
+      <div class="p-3">
+        <i class="bi bi-calendar-month" style="font-size: 2.5rem; opacity: 0.9;"></i>
+        <h2 class="mt-2 mb-0" style="font-size: 2rem; font-weight: bold;">L {{ number_format($ventasMes, 2) }}</h2>
+        <p class="mb-0" style="opacity: 0.9; font-size: 0.95rem;">Ventas del Mes</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="content-card text-center" style="background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); color: white;">
+      <div class="p-3">
+        <i class="bi bi-box-seam" style="font-size: 2.5rem; opacity: 0.9;"></i>
+        <h2 class="mt-2 mb-0" style="font-size: 2rem; font-weight: bold;">{{ $totalPedidos }}</h2>
+        <p class="mb-0" style="opacity: 0.9; font-size: 0.95rem;">Total de Pedidos</p>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Filtros -->
 <div class="content-card mb-4">
   <form action="{{ route('pedidos.admin') }}" method="GET" class="row g-3">
-    <div class="col-md-4">
+    <div class="col-md-3">
       <label for="busqueda" class="form-label">Buscar</label>
       <input type="text" class="form-control" id="busqueda" name="busqueda" 
              value="{{ request('busqueda') }}" 
              placeholder="ID pedido, nombre, email o teléfono...">
     </div>
-    <div class="col-md-3">
+    <div class="col-md-2">
       <label for="estado" class="form-label">Estado</label>
       <select class="form-select" id="estado" name="estado">
         <option value="">Todos los estados</option>
@@ -28,17 +68,39 @@
         <option value="cancelado" {{ request('estado') == 'cancelado' ? 'selected' : '' }}>Cancelado</option>
       </select>
     </div>
-    <div class="col-md-2 d-flex align-items-end">
+    <div class="col-md-2">
+      <label for="fecha_inicio" class="form-label">Fecha Inicio</label>
+      <input type="date" class="form-control" id="fecha_inicio" name="fecha_inicio" 
+             value="{{ request('fecha_inicio') }}">
+    </div>
+    <div class="col-md-2">
+      <label for="fecha_fin" class="form-label">Fecha Fin</label>
+      <input type="date" class="form-control" id="fecha_fin" name="fecha_fin" 
+             value="{{ request('fecha_fin') }}">
+    </div>
+    <div class="col-md-1 d-flex align-items-end">
       <button type="submit" class="btn-green w-100">
-        <i class="bi bi-search"></i> Buscar
+        <i class="bi bi-search"></i>
       </button>
     </div>
-    <div class="col-md-3 d-flex align-items-end">
+    <div class="col-md-2 d-flex align-items-end">
       <a href="{{ route('pedidos.admin') }}" class="btn btn-outline-secondary w-100">
         <i class="bi bi-x-circle"></i> Limpiar
       </a>
     </div>
   </form>
+
+  <!-- Botón de Reporte PDF -->
+  @if(request()->hasAny(['fecha_inicio', 'fecha_fin', 'estado', 'busqueda']))
+    <div class="row mt-3">
+      <div class="col-12">
+        <a href="{{ route('pedidos.reporte.pdf', request()->all()) }}" 
+           class="btn btn-danger w-100" target="_blank">
+          <i class="bi bi-file-pdf me-2"></i>Descargar Reporte PDF de Resultados
+        </a>
+      </div>
+    </div>
+  @endif
 </div>
 
 <!-- Tabla de Ventas -->
@@ -113,8 +175,25 @@
                 </div>
               </td>
             </tr>
+          @endforeach
+        </tbody>
+      </table>
+    </div>
 
-            <!-- Modal Detalle Pedido -->
+    <!-- Modales -->
+    @foreach($pedidos as $pedido)
+      @php
+        $estadoClasses = [
+          'pendiente' => 'bg-warning',
+          'procesando' => 'bg-info',
+          'enviado' => 'bg-primary',
+          'entregado' => 'bg-success',
+          'cancelado' => 'bg-danger'
+        ];
+        $estadoClass = $estadoClasses[$pedido->estado] ?? 'bg-secondary';
+      @endphp
+      
+      <!-- Modal Detalle Pedido -->
             <div class="modal fade" id="modalDetalle{{ $pedido->id }}" tabindex="-1">
               <div class="modal-dialog modal-lg">
                 <div class="modal-content">
@@ -216,9 +295,6 @@
               </div>
             </div>
           @endforeach
-        </tbody>
-      </table>
-    </div>
 
     <!-- Paginación -->
     <div class="mt-4">

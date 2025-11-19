@@ -61,15 +61,24 @@
                       @endif
                     </td>
                     <td>
-                      <a href="{{ route('pedidos.show', $pedido) }}" class="btn btn-sm btn-outline-primary me-1" title="Ver Detalle">
-                        <i class="bi bi-eye"></i>
-                      </a>
-                      <a href="{{ route('pedidos.factura', $pedido) }}" class="btn btn-sm btn-outline-success me-1" target="_blank" title="Ver Factura">
-                        <i class="bi bi-receipt"></i>
-                      </a>
-                      <a href="{{ route('pedidos.factura.pdf', $pedido) }}" class="btn btn-sm btn-outline-danger" title="Descargar PDF">
-                        <i class="bi bi-file-pdf"></i>
-                      </a>
+                      <div class="btn-group" role="group">
+                        <a href="{{ route('pedidos.show', $pedido) }}" 
+                           class="btn btn-sm btn-primary" 
+                           title="Ver Detalle">
+                          <i class="bi bi-eye me-1"></i>Ver
+                        </a>
+                        <a href="{{ route('pedidos.factura', $pedido) }}" 
+                           class="btn btn-sm btn-success" 
+                           target="_blank" 
+                           title="Ver Factura">
+                          <i class="bi bi-receipt me-1"></i>Factura
+                        </a>
+                        <a href="{{ route('pedidos.factura.pdf', $pedido) }}" 
+                           class="btn btn-sm btn-danger" 
+                           title="Descargar PDF">
+                          <i class="bi bi-file-pdf me-1"></i>PDF
+                        </a>
+                      </div>
                     </td>
                   </tr>
                 @endforeach

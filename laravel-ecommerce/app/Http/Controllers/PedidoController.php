@@ -125,7 +125,12 @@ class PedidoController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'nombre_completo' => 'required|string|max:255',
+            'nombre_completo' => [
+                'required',
+                'string',
+                'max:255',
+                'regex:/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+\s+[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/'
+            ],
             'email' => 'required|email',
             'telefono' => 'required|string',
             'direccion' => 'required|string',
@@ -133,6 +138,10 @@ class PedidoController extends Controller
             'codigo_postal' => 'nullable|string|max:10',
             'metodo_pago' => 'required|string',
             'notas' => 'nullable|string',
+        ];
+        
+        $messages = [
+            'nombre_completo.regex' => 'El nombre completo debe incluir al menos un nombre y un apellido'
         ];
 
         // Si el método de pago es tarjeta de crédito, validar datos de la tarjeta
@@ -143,7 +152,7 @@ class PedidoController extends Controller
             $rules['card_cvv'] = 'required|string|min:3|max:4';
         }
 
-        $validated = $request->validate($rules);
+        $validated = $request->validate($rules, $messages);
 
         $carrito = Auth::user()->carrito;
 
@@ -290,6 +299,8 @@ class PedidoController extends Controller
     {
         $estado = $request->get('estado');
         $busqueda = $request->get('busqueda');
+        $fechaInicio = $request->get('fecha_inicio');
+        $fechaFin = $request->get('fecha_fin');
 
         $query = Pedido::with(['user', 'detalles.producto']);
 
@@ -306,9 +317,46 @@ class PedidoController extends Controller
             });
         }
 
-        $pedidos = $query->latest()->paginate(15);
+        // Filtro de rango de fechas
+        if ($fechaInicio && $fechaFin) {
+            $query->whereBetween('created_at', [
+                $fechaInicio . ' 00:00:00',
+                $fechaFin . ' 23:59:59'
+            ]);
+        } elseif ($fechaInicio) {
+            $query->whereDate('created_at', '>=', $fechaInicio);
+        } elseif ($fechaFin) {
+            $query->whereDate('created_at', '<=', $fechaFin);
+        }
 
-        return view('admin.ventas.index', compact('pedidos'));
+        $pedidos = $query->latest()->paginate(15)->appends($request->all());
+
+        // Métricas del Dashboard
+        $ventasHoy = Pedido::whereDate('created_at', today())
+            ->whereIn('estado', ['procesando', 'enviado', 'entregado'])
+            ->sum('total');
+        
+        $ventasSemana = Pedido::whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()])
+            ->whereIn('estado', ['procesando', 'enviado', 'entregado'])
+            ->sum('total');
+        
+        $ventasMes = Pedido::whereMonth('created_at', now()->month)
+            ->whereYear('created_at', now()->year)
+            ->whereIn('estado', ['procesando', 'enviado', 'entregado'])
+            ->sum('total');
+        
+        $totalPedidos = Pedido::count();
+        
+        $pedidosPendientes = Pedido::where('estado', 'pendiente')->count();
+
+        return view('admin.ventas.index', compact(
+            'pedidos',
+            'ventasHoy',
+            'ventasSemana',
+            'ventasMes',
+            'totalPedidos',
+            'pedidosPendientes'
+        ));
     }
 
     /**
@@ -327,5 +375,72 @@ class PedidoController extends Controller
 
         return redirect()->route('pedidos.admin')
             ->with('success', 'Estado del pedido actualizado correctamente');
+    }
+
+    /**
+     * Generar reporte PDF de ventas
+     * Accesible para admin y cajero
+     */
+    public function reportePdf(Request $request)
+    {
+        $fechaInicio = $request->get('fecha_inicio');
+        $fechaFin = $request->get('fecha_fin');
+        $estado = $request->get('estado');
+
+        $query = Pedido::with(['user', 'detalles.producto']);
+
+        if ($estado) {
+            $query->where('estado', $estado);
+        }
+
+        if ($fechaInicio && $fechaFin) {
+            $query->whereBetween('created_at', [
+                $fechaInicio . ' 00:00:00',
+                $fechaFin . ' 23:59:59'
+            ]);
+        } elseif ($fechaInicio) {
+            $query->whereDate('created_at', '>=', $fechaInicio);
+        } elseif ($fechaFin) {
+            $query->whereDate('created_at', '<=', $fechaFin);
+        }
+
+        $pedidos = $query->latest()->get();
+
+        // Calcular totales
+        $totalVentas = $pedidos->sum('total');
+        $cantidadPedidos = $pedidos->count();
+        $promedioVenta = $cantidadPedidos > 0 ? $totalVentas / $cantidadPedidos : 0;
+
+        // Agrupar por estado
+        $porEstado = $pedidos->groupBy('estado')->map(function ($items) {
+            return [
+                'cantidad' => $items->count(),
+                'total' => $items->sum('total')
+            ];
+        });
+
+        // Agrupar por método de pago
+        $porMetodoPago = $pedidos->groupBy('metodo_pago')->map(function ($items) {
+            return [
+                'cantidad' => $items->count(),
+                'total' => $items->sum('total')
+            ];
+        });
+
+        $pdf = Pdf::loadView('admin.ventas.reporte-pdf', compact(
+            'pedidos',
+            'fechaInicio',
+            'fechaFin',
+            'estado',
+            'totalVentas',
+            'cantidadPedidos',
+            'promedioVenta',
+            'porEstado',
+            'porMetodoPago'
+        ));
+
+        $nombreArchivo = 'reporte-ventas-' . ($fechaInicio ?? 'inicio') . '-' . ($fechaFin ?? 'fin') . '.pdf';
+
+        return $pdf->download($nombreArchivo);
     }
 }

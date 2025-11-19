@@ -276,10 +276,10 @@
       @foreach($pedido->detalles as $index => $detalle)
       <tr>
         <td>{{ $index + 1 }}</td>
-        <td><strong>{{ $detalle->nombre_producto }}</strong></td>
+        <td><strong>{{ $detalle->producto->nombre }}</strong></td>
         <td class="text-center">{{ $detalle->cantidad }}</td>
-        <td class="text-right">L {{ number_format($detalle->precio_unitario, 2) }}</td>
-        <td class="text-right"><strong>L {{ number_format($detalle->subtotal, 2) }}</strong></td>
+        <td class="text-right">L {{ number_format($detalle->precio, 2) }}</td>
+        <td class="text-right"><strong>L {{ number_format($detalle->precio * $detalle->cantidad, 2) }}</strong></td>
       </tr>
       @endforeach
     </tbody>
