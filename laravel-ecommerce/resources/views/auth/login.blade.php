@@ -101,11 +101,8 @@
 
                     <hr class="my-4">
 
-                    <a href="{{ route('social.redirect', 'google') }}" class="btn btn-outline-dark btn-social">
+                    <a href="{{ route('social.redirect', 'google') }}" class="btn btn-outline-dark btn-social w-100">
                         <i class="bi bi-google"></i> Continuar con Google
-                    </a>
-                    <a href="{{ route('social.redirect', 'facebook') }}" class="btn btn-outline-primary btn-social">
-                        <i class="bi bi-facebook"></i> Continuar con Facebook
                     </a>
                 </div>
 
@@ -190,11 +187,8 @@
 
                         <hr class="my-4">
 
-                        <a href="{{ route('social.redirect', 'google') }}" class="btn btn-outline-dark btn-social">
+                        <a href="{{ route('social.redirect', 'google') }}" class="btn btn-outline-dark btn-social w-100">
                             <i class="bi bi-google"></i> Registrarse con Google
-                        </a>
-                        <a href="{{ route('social.redirect', 'facebook') }}" class="btn btn-outline-primary btn-social">
-                            <i class="bi bi-facebook"></i> Registrarse con Facebook
                         </a>
                     </div>
                 @endif

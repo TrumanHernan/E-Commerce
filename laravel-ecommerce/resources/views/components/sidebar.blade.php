@@ -52,6 +52,12 @@
         </a>
       </li>
       <li>
+        <a href="{{ route('admin.usuarios.index') }}" class="{{ request()->routeIs('admin.usuarios.*') ? 'active' : '' }}">
+          <i class="bi bi-person-badge"></i>
+          <span>Usuarios</span>
+        </a>
+      </li>
+      <li>
         <a href="{{ route('home') }}">
           <i class="bi bi-house-door"></i>
           <span>Ver Sitio Web</span>
