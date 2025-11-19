@@ -19,29 +19,58 @@ if [ -z "$APP_KEY" ] || [ "$APP_KEY" = "base64:placeholder" ]; then
     php artisan key:generate --force
 fi
 
-# Limpiar caché de configuración
+# Limpiar caché de configuración (solo archivos locales, no requiere DB)
 echo "Clearing configuration cache..."
-php artisan config:clear
-php artisan cache:clear
-php artisan route:clear
-php artisan view:clear
+php artisan config:clear || true
+php artisan route:clear || true
+php artisan view:clear || true
 
-# Optimizar para producción
-if [ "$APP_ENV" = "production" ]; then
-    echo "Optimizing for production..."
-    php artisan config:cache
-    php artisan route:cache
-    php artisan view:cache
+# Función para verificar conexión a la base de datos
+wait_for_db() {
+    echo "Waiting for database connection..."
+    max_tries=30
+    count=0
+
+    until php artisan db:show --database=pgsql >/dev/null 2>&1 || [ $count -eq $max_tries ]; do
+        count=$((count + 1))
+        echo "Attempt $count/$max_tries: Database not ready yet..."
+        sleep 2
+    done
+
+    if [ $count -eq $max_tries ]; then
+        echo "WARNING: Could not connect to database after $max_tries attempts"
+        return 1
+    fi
+
+    echo "Database connection established!"
+    return 0
+}
+
+# Intentar conectar a la base de datos
+if wait_for_db; then
+    # Limpiar cache de base de datos solo si la conexión funciona
+    echo "Clearing database cache..."
+    php artisan cache:clear || true
+
+    # Ejecutar migraciones
+    echo "Running migrations..."
+    php artisan migrate --force --no-interaction || echo "WARNING: Migrations failed"
+else
+    echo "WARNING: Skipping database operations due to connection issues"
 fi
 
-# Ejecutar migraciones
-echo "Running migrations..."
-php artisan migrate --force --no-interaction
+# Optimizar para producción (no requiere DB)
+if [ "$APP_ENV" = "production" ]; then
+    echo "Optimizing for production..."
+    php artisan config:cache || true
+    php artisan route:cache || true
+    php artisan view:cache || true
+fi
 
 # Crear storage link si no existe
 if [ ! -L "public/storage" ]; then
     echo "Creating storage link..."
-    php artisan storage:link
+    php artisan storage:link || true
 fi
 
 echo "Application ready!"
