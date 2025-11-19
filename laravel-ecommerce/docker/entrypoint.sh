@@ -55,6 +55,17 @@ if wait_for_db; then
     # Ejecutar migraciones
     echo "Running migrations..."
     php artisan migrate --force --no-interaction || echo "WARNING: Migrations failed"
+
+    # Ejecutar seeders solo si la base de datos está vacía
+    echo "Checking if database needs seeding..."
+    PRODUCT_COUNT=$(php artisan tinker --execute="echo App\Models\Producto::count();" 2>/dev/null || echo "0")
+
+    if [ "$PRODUCT_COUNT" = "0" ] || [ "$RUN_SEEDERS" = "true" ]; then
+        echo "Seeding database with initial data..."
+        php artisan db:seed --force || echo "WARNING: Seeding failed"
+    else
+        echo "Database already has data, skipping seeders"
+    fi
 else
     echo "WARNING: Skipping database operations due to connection issues"
 fi

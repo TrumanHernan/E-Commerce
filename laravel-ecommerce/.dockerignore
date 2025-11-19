@@ -61,7 +61,7 @@ storage/logs/*
 # Build artifacts
 public/hot
 public/storage
-public/build
+# public/build - Don't ignore, generated during 
 
 # MacOS
 .DS_Store
