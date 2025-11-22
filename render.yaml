@@ -4,12 +4,7 @@ services:
     env: php
     region: oregon
     rootDir: laravel-ecommerce
-    buildCommand: |
-      composer install --no-dev --optimize-autoloader --no-scripts
-      php artisan key:generate --force
-      php artisan migrate --force
-      php artisan storage:link
-      chmod -R 775 storage bootstrap/cache
+    buildCommand: bash scripts/render-build.sh
     startCommand: php artisan serve --host=0.0.0.0 --port=$PORT
     envVars:
       - key: APP_NAME
