@@ -5,15 +5,12 @@ services:
     region: oregon
     rootDir: laravel-ecommerce
     buildCommand: |
-      cd laravel-ecommerce
-      composer install --optimize-autoloader --no-dev
+      composer install --no-dev --optimize-autoloader --no-scripts
       php artisan key:generate --force
-      php artisan storage:link
-      php artisan config:cache
-      php artisan route:cache
-      php artisan view:cache
       php artisan migrate --force
-    startCommand: cd laravel-ecommerce && php artisan serve --host=0.0.0.0 --port=$PORT
+      php artisan storage:link
+      chmod -R 775 storage bootstrap/cache
+    startCommand: php artisan serve --host=0.0.0.0 --port=$PORT
     envVars:
       - key: APP_NAME
         value: NutriShop
