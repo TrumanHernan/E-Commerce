@@ -149,8 +149,8 @@
     <li>
       <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
         @csrf
-        <button type="submit" style="background: none; border: none; color: #cbd5e1; width: 100%; text-align: left; padding: 15px 20px; cursor: pointer; display: flex; align-items: center; font-size: 16px; transition: all 0.3s ease;">
-          <i class="bi bi-box-arrow-right" style="margin-right: 10px; font-size: 20px;"></i>
+        <button type="submit" class="logout-btn">
+          <i class="bi bi-box-arrow-right"></i>
           <span>Cerrar Sesión</span>
         </button>
       </form>

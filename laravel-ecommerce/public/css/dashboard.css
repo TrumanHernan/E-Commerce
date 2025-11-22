@@ -74,6 +74,31 @@ body {
   border-left: 4px solid white;
 }
 
+.logout-btn {
+  background: none;
+  border: none;
+  color: #cbd5e1;
+  width: 100%;
+  text-align: left;
+  padding: 15px 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.logout-btn i {
+  margin-right: 10px;
+  font-size: 20px;
+}
+
+.logout-btn:hover {
+  background-color: #11BF6E;
+  color: white;
+  padding-left: 25px;
+}
+
 .main-content {
   flex: 1;
   margin-left: 250px;
@@ -498,6 +523,10 @@ footer {
 
   .sidebar-nav form button {
     justify-content: center;
+  }
+
+  .logout-btn i {
+    margin-right: 0;
   }
 
   .main-content {
