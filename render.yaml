@@ -1,0 +1,31 @@
+services:
+  - type: web
+    name: e-commerce-nutrishop
+    env: php
+    region: oregon
+    rootDir: laravel-ecommerce
+    buildCommand: |
+      cd laravel-ecommerce
+      composer install --optimize-autoloader --no-dev
+      php artisan key:generate --force
+      php artisan storage:link
+      php artisan config:cache
+      php artisan route:cache
+      php artisan view:cache
+      php artisan migrate --force
+    startCommand: cd laravel-ecommerce && php artisan serve --host=0.0.0.0 --port=$PORT
+    envVars:
+      - key: APP_NAME
+        value: NutriShop
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+      - key: LOG_LEVEL
+        value: info
+      - key: SESSION_DRIVER
+        value: database
+      - key: CACHE_STORE
+        value: file
+      - key: QUEUE_CONNECTION
+        value: database
