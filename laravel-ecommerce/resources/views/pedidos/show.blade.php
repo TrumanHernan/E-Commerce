@@ -10,6 +10,11 @@
 </head>
 <body>
 
+  <!-- Botón Menú Móvil -->
+  <button class="mobile-menu-toggle" id="mobileMenuToggle">
+    <i class="bi bi-list"></i>
+  </button>
+
   <div class="dashboard-container">
 
     @include('components.sidebar')
@@ -19,19 +24,19 @@
       <div class="page-header d-flex justify-content-between align-items-center">
         <div>
           <h1>Pedido #{{ str_pad($pedido->id, 6, '0', STR_PAD_LEFT) }}</h1>
-          <p>Realizado el {{ $pedido->created_at->format('d/m/Y \a \l\a\s H:i') }}</p>
-        </div>
-        <div>
-          <a href="{{ route('pedidos.factura', $pedido) }}" class="btn btn-success btn-lg shadow-sm me-2" target="_blank">
-            <i class="bi bi-receipt-cutoff me-2"></i>Ver Factura
+          <p>Realizado el {{ $pedido->created_at->format('d/m/Y \a \l\a\s H:i') }        <div>
+          <a href="{{ route('pedidos.factura', $pedido) }}" class="btn btn-success me-2" target="_blank">
+            <i class="bi bi-receipt me-2"></i>Ver Factura
           </a>
-          <a href="{{ route('pedidos.factura.pdf', $pedido) }}" class="btn btn-danger btn-lg shadow-sm me-2">
-            <i class="bi bi-file-earmark-pdf-fill me-2"></i>Descargar PDF
+          <a href="{{ route('pedidos.factura.pdf', $pedido) }}" class="btn btn-danger me-2">
+            <i class="bi bi-file-pdf me-2"></i>Descargar PDF
           </a>
-          <a href="{{ route('pedidos.index') }}" class="btn btn-outline-secondary btn-lg">
+          <a href="{{ route('pedidos.index') }}" class="btn btn-outline-secondary">
             <i class="bi bi-arrow-left me-2"></i>Volver
           </a>
         </div>
+</i>Volver
+        </a>
       </div>
 
       <div class="row">
@@ -153,6 +158,38 @@
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Toggle del menú móvil
+    document.addEventListener('DOMContentLoaded', function() {
+      const menuToggle = document.getElementById('mobileMenuToggle');
+      const sidebar = document.querySelector('.sidebar');
+      
+      // Crear overlay
+      const overlay = document.createElement('div');
+      overlay.className = 'sidebar-overlay';
+      document.body.appendChild(overlay);
 
+      // Toggle al hacer clic en el botón
+      menuToggle.addEventListener('click', function() {
+        sidebar.classList.toggle('active');
+        overlay.classList.toggle('active');
+      });
+
+      // Cerrar al hacer clic en el overlay
+      overlay.addEventListener('click', function() {
+        sidebar.classList.remove('active');
+        overlay.classList.remove('active');
+      });
+
+      // Cerrar al hacer clic en cualquier enlace del menú
+      const menuLinks = sidebar.querySelectorAll('a, button[type="submit"]');
+      menuLinks.forEach(link => {
+        link.addEventListener('click', function() {
+          sidebar.classList.remove('active');
+          overlay.classList.remove('active');
+        });
+      });
+    });
+  </script>
 </body>
 </html>

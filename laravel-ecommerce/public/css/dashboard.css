@@ -423,6 +423,50 @@ footer {
   background-color: #1e293b;
 }
 
+/* Botón de menú móvil */
+.mobile-menu-toggle {
+  display: none;
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  z-index: 1100;
+  background-color: #11BF6E;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  width: 45px;
+  height: 45px;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.mobile-menu-toggle:hover {
+  background-color: #0fa65a;
+  transform: scale(1.05);
+}
+
+.mobile-menu-toggle:active {
+  transform: scale(0.95);
+}
+
+/* Overlay para cerrar el menú al hacer clic fuera */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+.sidebar-overlay.active {
+  display: block;
+}
+
 @media (max-width: 768px) {
   .sidebar {
     width: 70px;
@@ -430,6 +474,10 @@ footer {
 
   .sidebar-header h3 {
     font-size: 18px;
+  }
+
+  .sidebar-header p {
+    display: none;
   }
 
   .sidebar-nav a span {
@@ -441,6 +489,14 @@ footer {
   }
 
   .sidebar-nav a {
+    justify-content: center;
+  }
+
+  .sidebar-nav form button span {
+    display: none;
+  }
+
+  .sidebar-nav form button {
     justify-content: center;
   }
 
@@ -460,15 +516,27 @@ footer {
 }
 
 @media (max-width: 576px) {
+  .mobile-menu-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
   .sidebar {
-    width: 0;
+    width: 250px;
     transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+
+  .sidebar.active {
+    transform: translateX(0);
   }
 
   .main-content {
     margin-left: 0;
     width: 100%;
     padding: 15px;
+    padding-top: 70px;
   }
 
   .content-card {
@@ -477,5 +545,9 @@ footer {
 
   .table-container {
     overflow-x: scroll;
+  }
+
+  .page-header {
+    margin-top: 10px;
   }
 }

@@ -13,6 +13,11 @@
 
 <body>
 
+  <!-- Botón Menú Móvil -->
+  <button class="mobile-menu-toggle" id="mobileMenuToggle">
+    <i class="bi bi-list"></i>
+  </button>
+
   <div class="dashboard-container">
 
     @include('components.sidebar')
@@ -40,6 +45,41 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <script>
+    // Toggle del menú móvil
+    document.addEventListener('DOMContentLoaded', function() {
+      const menuToggle = document.getElementById('mobileMenuToggle');
+      const sidebar = document.querySelector('.sidebar');
+      
+      // Crear overlay
+      const overlay = document.createElement('div');
+      overlay.className = 'sidebar-overlay';
+      document.body.appendChild(overlay);
+
+      // Toggle al hacer clic en el botón
+      menuToggle.addEventListener('click', function() {
+        sidebar.classList.toggle('active');
+        overlay.classList.toggle('active');
+      });
+
+      // Cerrar al hacer clic en el overlay
+      overlay.addEventListener('click', function() {
+        sidebar.classList.remove('active');
+        overlay.classList.remove('active');
+      });
+
+      // Cerrar al hacer clic en cualquier enlace del menú
+      const menuLinks = sidebar.querySelectorAll('a, button[type="submit"]');
+      menuLinks.forEach(link => {
+        link.addEventListener('click', function() {
+          sidebar.classList.remove('active');
+          overlay.classList.remove('active');
+        });
+      });
+    });
+  </script>
+
   @stack('scripts')
 
 </body>

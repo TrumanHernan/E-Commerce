@@ -10,6 +10,11 @@
 </head>
 <body>
 
+  <!-- Botón Menú Móvil -->
+  <button class="mobile-menu-toggle" id="mobileMenuToggle">
+    <i class="bi bi-list"></i>
+  </button>
+
   <div class="dashboard-container">
 
     @include('components.sidebar')
@@ -58,27 +63,16 @@
                         <span class="badge bg-success">Entregado</span>
                       @else
                         <span class="badge bg-danger">Cancelado</span>
-                      @endif
-                    </td>
-                    <td>
-                      <div class="btn-group" role="group">
-                        <a href="{{ route('pedidos.show', $pedido) }}" 
-                           class="btn btn-sm btn-primary" 
-                           title="Ver Detalle">
-                          <i class="bi bi-eye me-1"></i>Ver
-                        </a>
-                        <a href="{{ route('pedidos.factura', $pedido) }}" 
-                           class="btn btn-sm btn-success" 
-                           target="_blank" 
-                           title="Ver Factura">
-                          <i class="bi bi-receipt me-1"></i>Factura
-                        </a>
-                        <a href="{{ route('pedidos.factura.pdf', $pedido) }}" 
-                           class="btn btn-sm btn-danger" 
-                           title="Descargar PDF">
-                          <i class="bi bi-file-pdf me-1"></i>PDF
-                        </a>
-                      </div>
+                                          <a href="{{ route('pedidos.show', $pedido) }}" class="btn btn-sm btn-outline-primary me-1" title="Ver Detalle">
+                        <i class="bi bi-eye"></i>
+                      </a>
+                      <a href="{{ route('pedidos.factura', $pedido) }}" class="btn btn-sm btn-outline-success me-1" target="_blank" title="Ver Factura">
+                        <i class="bi bi-receipt"></i>
+                      </a>
+                      <a href="{{ route('pedidos.factura.pdf', $pedido) }}" class="btn btn-sm btn-outline-danger" title="Descargar PDF">
+                        <i class="bi bi-file-pdf"></i>
+                      <i class="bi bi-eye me-1"></i>Ver Detalle
+                      </a>
                     </td>
                   </tr>
                 @endforeach
@@ -120,6 +114,38 @@
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Toggle del menú móvil
+    document.addEventListener('DOMContentLoaded', function() {
+      const menuToggle = document.getElementById('mobileMenuToggle');
+      const sidebar = document.querySelector('.sidebar');
+      
+      // Crear overlay
+      const overlay = document.createElement('div');
+      overlay.className = 'sidebar-overlay';
+      document.body.appendChild(overlay);
 
+      // Toggle al hacer clic en el botón
+      menuToggle.addEventListener('click', function() {
+        sidebar.classList.toggle('active');
+        overlay.classList.toggle('active');
+      });
+
+      // Cerrar al hacer clic en el overlay
+      overlay.addEventListener('click', function() {
+        sidebar.classList.remove('active');
+        overlay.classList.remove('active');
+      });
+
+      // Cerrar al hacer clic en cualquier enlace del menú
+      const menuLinks = sidebar.querySelectorAll('a, button[type="submit"]');
+      menuLinks.forEach(link => {
+        link.addEventListener('click', function() {
+          sidebar.classList.remove('active');
+          overlay.classList.remove('active');
+        });
+      });
+    });
+  </script>
 </body>
 </html>
