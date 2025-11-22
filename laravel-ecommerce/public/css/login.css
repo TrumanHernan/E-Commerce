@@ -77,4 +77,32 @@
       width: 100%;
       background-color: white;
 }
-    
+/* Responsive para pantallas menores a 700px */
+@media (max-width: 700px) {
+  .panel-izquierdo {
+    display: none;
+  }
+
+  .contenedor-login {
+    max-width: 500px;
+  }
+
+  .panel-derecho {
+    padding: 2rem 1.5rem;
+  }
+
+  .contenedor-principal {
+    padding: 1rem;
+  }
+}
+
+/* Responsive para pantallas muy pequeñas (celulares) */
+@media (max-width: 480px) {
+  .panel-derecho {
+    padding: 1.5rem 1rem;
+  }
+
+  .contenedor-login {
+    max-width: 100%;
+  }
+}    
