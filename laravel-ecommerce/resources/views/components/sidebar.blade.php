@@ -1,6 +1,6 @@
 <aside class="sidebar">
   <div class="sidebar-header">
-    <h3><span style="color: white;">Nutri</span>Shop</h3>
+    <h3><span style="color: white;">Nutri</span><span class="shop-text">Shop</span></h3>
     <p style="margin: 5px 0 0 0; font-size: 14px; opacity: 0.9;">
       @if(Auth::user()->isAdmin())
         Panel Admin

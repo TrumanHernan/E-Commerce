@@ -497,8 +497,17 @@ footer {
     width: 70px;
   }
 
+  .sidebar-header {
+    padding: 15px 5px;
+  }
+
   .sidebar-header h3 {
-    font-size: 18px;
+    font-size: 20px;
+    margin: 0;
+  }
+
+  .sidebar-header h3 .shop-text {
+    display: none;
   }
 
   .sidebar-header p {
